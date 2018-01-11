@@ -598,7 +598,7 @@ class Mage_Paypal_Model_Api_Nvp extends Mage_Paypal_Model_Api_Abstract
         $options = $this->getShippingOptions();
         if ($this->getAddress()) {
             $request = $this->_importAddresses($request);
-            $request['ADDROVERRIDE'] = 1;
+            //$request['ADDROVERRIDE'] = 1;
         } elseif ($options && (count($options) <= 10)) { // doesn't support more than 10 shipping options
             $request['CALLBACK'] = $this->getShippingOptionsCallbackUrl();
             $request['CALLBACKTIMEOUT'] = 6; // max value
