@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<config>
+	<global>
+		<models>
+			<custompayment>
+				<class>Test_Custompayment_Model</class>
+			</custompayment>
+		</models>
+		<helpers>
+			<custompayment>
+				<class>Test_Custompayment_Helper</class>
+			</custompayment>
+		</helpers>
+		<blocks>
+			<custompayment>
+				<class>Test_Custompayment_Block</class>
+			</custompayment>
+		</blocks>
+	</global>
+	<default>
+		<payment>
+			<custompayment>
+				<model>custompayment/cod</model>
+				<active>1</active>
+				<order_status>pending</order_status>
+				<title>CUSTOM CARD</title>
+				<payment_action>sale</payment_action>
+				<submit_url>https://someurl.com</submit_url>
+				<merchant_id>Insert merchant id</merchant_id>
+				<allowspecific>0</allowspecific>
+				<sort_order>1</sort_order>
+			</custompayment>
+		</payment>
+	</default>
+	<frontend>
+		<routers>
+			<custompayment>
+				<use>standard</use>
+				<args>
+					<module>Test_Custompayment</module>
+					<frontname>customcard</frontname>
+				</args>
+			</custompayment>
+		</routers>
+	</frontend>
+</config>

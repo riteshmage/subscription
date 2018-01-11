@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+    <frontend>
+        <routers>
+            <orderdetail>
+                <use>standard</use>
+                    <args>
+                        <module>Test_Orderdetail</module>
+                        <frontName>od</frontName>
+                    </args>
+            </orderdetail>
+        </routers>
+    </frontend>
+</config>
