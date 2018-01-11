@@ -1,0 +1,8 @@
+app/code/core/
+app/etc/local.xml
+app/Mage.php
+downloader/
+errors/
+index.php
+var/
+media/
