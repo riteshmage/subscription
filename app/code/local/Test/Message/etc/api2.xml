@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<api2>
+		<resource_groups>
+			<test_message translate="title" module="Test_Message">
+				<title>Message</title>
+				<sort_order>1</sort_order>	
+			</test_message>
+		</resource_groups>
+		<resources>
+			<test_message translate="title" module="Test_Message">
+				<group>test_message</group>
+				<model>message/api2_message</model>
+				<title>Message</title>
+				<sort_order>1</sort_order>
+				<privileges>
+					<customer>
+						<create>1</create>
+						<retrieve>1</retrieve>
+					</customer>
+					<guest>
+						<create>1</create>
+						<retrieve>1</retrieve>
+					</guest>
+				</privileges>
+				<attributes translate="message_name message_description" module="Test_Message">
+					<message_name>Message Name</message_name>
+					<message_description>Message Description</message_description>
+				</attributes>
+				<routes>
+					<route_entity>
+						<route>/message/:message_name</route>
+						<action_type>entity</action_type>
+					</route_entity>
+					<route_collection>
+						<route>/message</route>
+						<action_type>collection</action_type>
+					</route_collection>
+				</routes>
+				<versions>1</versions>
+			</test_message>
+		</resources>
+	</api2>
+</config>
