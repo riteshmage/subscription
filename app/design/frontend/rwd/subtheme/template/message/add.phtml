@@ -1,0 +1,10 @@
+<div id="message">
+	<form id="msg-frm" name="msg-frm" action="<?php echo Mage::getUrl('message/index/save')  ?>" 		method="post">
+		Name:-<input type="text" name="message_name" class="input-text required-entry" placeholder=			"Enter name" /><br>
+		Message:-<textarea rows="4" cols="50" id="message_description" name="message_description" 			placeholder="add message" class="input-text required-entry"></textarea>
+				<input type="submit" value="Add message"/><br>
+	</form>	
+</div>
+<script type="text/javascript">
+ 	var customForm = new VarienForm('msg-frm');
+</script>	 

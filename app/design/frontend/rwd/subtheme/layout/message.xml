@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<message_index_test>
+		<label>Message</label>
+		<reference name="content" >
+			<block type="message/index" name="" template="message/add.phtml" />
+		</reference>
+	</message_index_test>
+</layout>
