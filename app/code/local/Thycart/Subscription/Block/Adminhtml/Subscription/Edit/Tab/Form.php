@@ -14,21 +14,6 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Edit_Tab_Form extends Ma
 			'class' => 'required-entry',
 			'after_element_html' => '<small>Add (productName)_(weekly/monthly/yearly)</small>'
 		));
-
-		//product id
-//==============================================================================================
-		$productConfig = array(
-			'input_name'  => 'sku',
-			'input_label' => $this->__('Product'),
-			'button_text' => $this->__('Select...'),
-			'required'    => true,
-			'input_id'    => 'sku'
-		);
-		$productChooserHelper = Mage::helper('multiproductchooser/chooser');
-		$productChooserHelper->createProductChooser(Mage::getModel('catalog/product'), $fieldset, $productConfig);
-//=============================================================================================
-
-
 		$fieldset->addField('max_billing_cycle', 'text', array(
 			'label'     => Mage::helper('subscription')->__('Max billing cycles allowed'),
 			'name'      => 'max_billing_cycle',
@@ -47,7 +32,9 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Edit_Tab_Form extends Ma
 		$fieldset->addField('discount_type', 'select', array(
 			'label'     => Mage::helper('subscription')->__('Discount Type'),
 			'name'      => 'discount_type',
-			'values' => array('-1'=>'Please Select..','fixed' => 'Fixed','%' => 'percentage'),
+			'required'  => true,
+			'class' => 'required-entry',
+			'values' => array(''=>'Please Select..','1' => 'Fixed','2' => 'percentage'),
 			'after_element_html' => '<small>Select discount type (fixed or %)</small>'
 		));
 		$fieldset->addField('discount_value', 'text', array(
@@ -57,13 +44,15 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Edit_Tab_Form extends Ma
 		));	
 		$fieldset->addField('active', 'radios', array(
 			'label'     => Mage::helper('subscription')->__('Active'),
-			'name'      => 'is_active',
+			'name'      => 'active',
+			'required'  => true,
+			'class' => 'required-entry',
 			'values' => array(
-				array('value'=>'0','label'=>'yes'),
-				array('value'=>'1','label'=>'no')
+				array('value'=>1,'label'=>'yes'),
+				array('value'=>0,'label'=>'no')
 			),
 		));
-		if(Mage::getSingleton('adminhtml/session')->getSubscriptionData())
+		if (Mage::getSingleton('adminhtml/session')->getSubscriptionData())
 			{
 				$form->setValues(Mage::getSingleton('adminhtml/session')->getSubscriptionData());
 				Mage::getSingleton('adminhtml/session')->setSubscriptionData(null);

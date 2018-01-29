@@ -7,7 +7,8 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Grid extends Mage_Adminh
 		$this->setId('subscription_rule');
 		$this->setDefaultSort('subscription_id');
 		$this->setDefaultDir('ASC');
-		//$this->setSaveParametersInSession(true);
+		$this->setUseAjax(true);
+		$this->setSaveParametersInSession(true);
 	}
 	protected function _prepareCollection()
 	{

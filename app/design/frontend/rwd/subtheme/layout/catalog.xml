@@ -222,7 +222,7 @@ Product view
                     <action method="setColumnCount"><columns>6</columns></action>
                     <action method="setItemLimit"><type>upsell</type><limit>6</limit></action>
                 </block>
-                <block type="orderdetail/subscription" name="subscriptiondetail" template="catalog/product/subscription.phtml"/>
+                <block type="blk_subscription/subscription" name="subscriptiondetail" template="catalog/product/subscription.phtml"/>
                 <block type="catalog/product_view_additional" name="product.info.additional" as="product_additional_data" />
                 <block type="catalog/product_view_description" name="product.description" as="description" template="catalog/product/view/description.phtml">
                     <action method="addToParentGroup"><group>detailed_info</group></action>

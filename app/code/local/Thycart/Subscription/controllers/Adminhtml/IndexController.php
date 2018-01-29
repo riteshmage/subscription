@@ -27,17 +27,18 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 		if($this->getRequest()->getParam('id'))
 		{
 			$id = $this->getRequest()->getParam('id');
-			try
-			{
-				$model  = Mage::getModel('subscription/master')->load($id);	
-			}
-			catch (Exception $e)
-			{
-				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-				Mage::getSingleton('adminhtml/session')->setMessageData($this->getRequest()->getPost());
-				$this->_redirect('*/*/edit', array('id' => $id));
-				return;
-			}
+		}
+		try
+		{
+			$model  = Mage::getModel('subscription/master')->load($id);			
+		}
+		catch (Exception $e)
+		{
+			Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+			Mage::getSingleton('adminhtml/session')->setMessageData($this->getRequest()->getPost());
+			$this->_redirect('*/*/edit', array('id' => $id));
+			return;
+			exit();
 		}
 		if (!empty($model) || empty($id))
 		{
@@ -55,6 +56,7 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 		{
 			Mage::getSingleton('adminhtml/session')->addError(Mage::helper('subscription')->__('Subscription does not exists'));
 			$this->_redirect('*/*/');
+			exit();
 		}
 	}
 
@@ -69,16 +71,33 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 		{
 			try {
 				$postData = $this->getRequest()->getPost();
+				unset($postData['page'],$postData['limit'],$postData['in_products'],$postData['type'],$postData['set_name'],$postData['chooser_sku'],$postData['chooser_sku'],$postData['entity_id'],$postData['chooser_name'],$postData['form_key'],$postData['is_active']);
 				$model = Mage::getModel('subscription/master');
 				if(!empty($this->getRequest()->getParam('id')))
 				{	
-					$id =$this->getRequest()->getParam('id');
+					$id = $this->getRequest()->getParam('id');
 					$model->load($id);
 				}
+				if($this->getRequest()->getParam('product_sku'))
+				{
+					$sku = $this->getRequest()->getParam('product_sku');
+					$sku = explode(',',$sku);
+					$sku = array_map('trim',$sku);
+					$product_id ='';
+					foreach ($sku as $key => $value) 
+					{	
+						$product_ids = Mage::getSingleton("catalog/product")->getIdBySku($value);
+						$product_id .= $product_ids.',';
+					}
+					$product_id = rtrim($product_id,',');
+					$sku = implode(',', $sku);
+					$postData['product_id'] = $product_id;
+					$postData['product_sku'] = $sku;
+				}
 				$model->addData($postData);
-				$model->save();  
+				$model->save();
 				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Rule successfully saved'));
-				Mage::getSingleton('adminhtml/session')->setMessageData(false);
+				Mage::getSingleton('adminhtml/session')->setSubscriptionData(false);
 				if ($this->getRequest()->getParam('back'))
 				{
 					$this->_redirect("*/*/edit", array("id" => $model->getId()));
@@ -90,7 +109,7 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 			catch (Exception $e)
 			{
 				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-				Mage::getSingleton('adminhtml/session')->setMessageData($this->getRequest()->getPost());
+				Mage::getSingleton('adminhtml/session')->setSubscriptionData($this->getRequest()->getPost());
 				$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
 				return;
 			}

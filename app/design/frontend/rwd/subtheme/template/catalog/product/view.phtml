@@ -85,7 +85,7 @@
                 <?php if ($_product->isSaleable() && $this->hasOptions()):?>
                     <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
                 <?php endif;?>
-                <?php echo $this->getChild('subscriptiondetail')->setData("productid",$_product->getId()); ?>
+                 <?php $this->getChild('subscriptiondetail')->setData("productid",$_product->getId()); ?>
                 <?php echo $this->getChildHtml('subscriptiondetail'); ?>
             </div>
 
@@ -167,7 +167,7 @@
                         this.form.submit();
                     }
                     Object.extend(Validation.methods, nv);
-                }```
+                }
             }.bind(productAddToCartForm);
         //]]>
         </script>
