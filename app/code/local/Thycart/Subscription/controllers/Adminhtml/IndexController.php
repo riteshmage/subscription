@@ -78,11 +78,16 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 					$id = $this->getRequest()->getParam('id');
 					$model->load($id);
 				}
-				if($this->getRequest()->getParam('product_sku'))
+				if($this->getRequest()->getParam('product_sku') && $this->getRequest()->getParam('unit'))
 				{
-					$sku = $this->getRequest()->getParam('product_sku');
-					$sku = explode(',',$sku);
-					$sku = array_map('trim',$sku);
+					$sku  = $this->getRequest()->getParam('product_sku');
+					$unit = $this->getRequest()->getParam('unit');
+					$sku  = explode(',',$sku);
+					$sku  = array_map('trim',$sku);
+					if(is_array($unit))
+					{
+						$unit = implode(',', $unit);						
+					}
 					$product_id ='';
 					foreach ($sku as $key => $value) 
 					{	
@@ -91,11 +96,14 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 					}
 					$product_id = rtrim($product_id,',');
 					$sku = implode(',', $sku);
-					$postData['product_id'] = $product_id;
+
+					$postData['product_id']  = $product_id;
 					$postData['product_sku'] = $sku;
+					$postData['unit']        = $unit;
 				}
 				$model->addData($postData);
 				$model->save();
+
 				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Rule successfully saved'));
 				Mage::getSingleton('adminhtml/session')->setSubscriptionData(false);
 				if ($this->getRequest()->getParam('back'))

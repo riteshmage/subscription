@@ -3,6 +3,7 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Edit_Tab_Form extends Ma
 {
 	protected function _prepareForm()
 	{
+		
 		$form = new Varien_Data_Form();
 		$this->setForm($form);
 		$fieldset = $form->addFieldset('subscription_form', array('legend'=>Mage::helper('subscription')->__('Subscription')));
@@ -17,8 +18,7 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Edit_Tab_Form extends Ma
 		$fieldset->addField('max_billing_cycle', 'text', array(
 			'label'     => Mage::helper('subscription')->__('Max billing cycles allowed'),
 			'name'      => 'max_billing_cycle',
-			'required'  => true,
-			'class' => 'required-entry',
+			'value'		=> 2,
 			'after_element_html' => '<small>Number of cyles allowed to subscription</small>'
 		));
 		$fieldset->addField('show_start_date', 'radios', array(
@@ -42,25 +42,31 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Edit_Tab_Form extends Ma
 			'name'      => 'discount_value',
 			'after_element_html' => '<small>Enter Discount Amount or %</small>'
 		));	
-		$fieldset->addField('active', 'radios', array(
+		$fieldset->addField('active', 'select', array(
 			'label'     => Mage::helper('subscription')->__('Active'),
 			'name'      => 'active',
 			'required'  => true,
 			'class' => 'required-entry',
-			'values' => array(
-				array('value'=>1,'label'=>'yes'),
-				array('value'=>0,'label'=>'no')
-			),
+			'values' => array(''=>'Please select','1'=>'Yes','2'=>'No'),
+			'after_element_html' => '<small>please select to show on frontend </small>'
+		));
+		$fieldset->addField('unit', 'multiselect', array(
+			'label'     => Mage::helper('subscription')->__('Unit'),
+			'name'      => 'unit',
+			'required'  => true,
+			'class' => 'required-entry',
+			'after_element_html' => '<small>select subscription type</small>',
+			'values' => array(Mage::helper('subscription')->getUnitMaster())					,
 		));
 		if (Mage::getSingleton('adminhtml/session')->getSubscriptionData())
-			{
-				$form->setValues(Mage::getSingleton('adminhtml/session')->getSubscriptionData());
-				Mage::getSingleton('adminhtml/session')->setSubscriptionData(null);
-			} 
-			elseif(Mage::registry('subscription_data'))
-				{
-					$form->setValues(Mage::registry('subscription_data')->getData());
-				}
-				return parent::_prepareForm();
-			}
+		{
+			$form->addValues(Mage::getSingleton('adminhtml/session')->getSubscriptionData());
+			Mage::getSingleton('adminhtml/session')->setSubscriptionData(null);			
+		} 
+		elseif(Mage::registry('subscription_data'))
+		{
+			$form->addValues(Mage::registry('subscription_data')->getData());
 		}
+		return parent::_prepareForm();
+	}
+}

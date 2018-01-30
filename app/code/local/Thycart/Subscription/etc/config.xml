@@ -47,6 +47,9 @@
 					<master>
 						<table>subscription_master</table>
 					</master>
+					<unit>
+						<table>unit_master</table>
+					</unit>
 				</entities>
 			</subscription_resource>
 		</models>
