@@ -13,10 +13,20 @@ getProductChooser = function (url) {
             onSuccess: function (b) {
                 var a = $("product_chooser");
                 a.update(b.responseText);
-                a.scrollTo()
+                a.scrollTo();
+                if(jQuery("#product_sku").val())
+                {
+                    var skus = jQuery("#product_sku").val().split(',');
+                    setTimeout(function()
+                    { 
+                        jQuery.each(skus,function(i,val)
+                        {
+                            jQuery('input:checkbox[value="'+val+'"]').prop("checked",true);
+                        })
+                    }, 500);
+                }
             }
-        });
-    $("product_sku").value = '';               
+        });         
 };
 
 jQuery(document).ready(function(){
@@ -24,8 +34,8 @@ jQuery(document).ready(function(){
     jQuery('#trigger').click(function()
     {
         jQuery('#product_chooser').toggle();
+        
     });
-
 });
 
 var VarienRulesForm = new Class.create();
@@ -278,7 +288,7 @@ VarienRulesForm.prototype = {
             "selected[]": this.chooserSelectedItems.keys()
         };
         
-        $("product_sku").value = this.chooserSelectedItems.keys().join(", ");           
+        $("product_sku").value = this.chooserSelectedItems.keys().join(",");           
         
         
       
