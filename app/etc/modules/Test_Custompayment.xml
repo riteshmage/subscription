@@ -1,8 +1,0 @@
-<config>
-    <modules>
-        <Test_Custompayment>
-            <active>true</active>
-            <codePool>local</codePool>
-        </Test_Custompayment>
-    </modules>
-</config>
