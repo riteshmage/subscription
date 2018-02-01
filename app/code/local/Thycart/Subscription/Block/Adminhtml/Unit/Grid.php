@@ -42,8 +42,8 @@ class Thycart_Subscription_Block_Adminhtml_Unit_Grid extends Mage_Adminhtml_Bloc
 			'width'     => '50px',
 			'index'     => 'active',
 		));
-		$this->addExportType('*/*/exportCsv', Mage::helper('sales')->__('CSV')); 
-		$this->addExportType('*/*/exportExcel', Mage::helper('sales')->__('Excel'));
+		// $this->addExportType('*/*/exportCsv', Mage::helper('sales')->__('CSV')); 
+		// $this->addExportType('*/*/exportExcel', Mage::helper('sales')->__('Excel'));
 	}
 	public function getRowUrl($row)
 	{

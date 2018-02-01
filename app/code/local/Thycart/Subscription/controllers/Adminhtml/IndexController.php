@@ -23,7 +23,7 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 	{
 		$model = new stdClass();
 		$id = 0;
-		$this->_title($this->__("Subscription Rule"));
+		$this->_title($this->__('Subscription Rule'));
 		if($this->getRequest()->getParam('id'))
 		{
 			$id = $this->getRequest()->getParam('id');

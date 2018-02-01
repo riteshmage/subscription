@@ -22,7 +22,7 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 	{
 		$model = new stdClass();
 		$id = 0;
-		$this->_title($this->__("Unit Master"));
+		$this->_title($this->__('Unit Master'));
 		if($this->getRequest()->getParam('id'))
 		{
 			$id = $this->getRequest()->getParam('id');
