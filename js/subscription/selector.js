@@ -11,9 +11,12 @@ getProductChooser = function (url) {
         url, {
             method: "post",
             onSuccess: function (b) {
+                jQuery('#product_chooser').show();
+
                 var a = $("product_chooser");
                 a.update(b.responseText);
                 a.scrollTo();
+                
                 if(jQuery("#product_sku").val())
                 {
                     var skus = jQuery("#product_sku").val().split(',');
@@ -30,12 +33,7 @@ getProductChooser = function (url) {
 };
 
 jQuery(document).ready(function(){
-    jQuery('#product_chooser').css('display','none');
-    jQuery('#trigger').click(function()
-    {
-        jQuery('#product_chooser').toggle();
-        
-    });
+    jQuery('#product_chooser').hide();
 });
 
 var VarienRulesForm = new Class.create();
@@ -274,28 +272,43 @@ VarienRulesForm.prototype = {
         }
         
     },
-    chooserGridCheckboxCheck: function (b, a, c) {  
-      
-        if (c) {
-            if (!a.up("th")) {
-                this.chooserSelectedItems.set(a.value, 1)
+    chooserGridCheckboxCheck: function (b, a, c) { 
+        if (c && a.value!=='on') 
+        {
+            if(!$("product_sku").value)
+            {
+                $("product_sku").value = a.value;
             }
-        } else {
-            this.chooserSelectedItems.unset(a.value)
+            else if($("product_sku").value !== '' && $("product_sku").value !== a.value)
+            {
+                $("product_sku").value = $("product_sku").value +','+a.value;
+            }
+        } 
+        else if(a.value ==='on')
+        {
+            $("product_sku").value = '';
         }
-                
-        b.reloadParams = {
-            "selected[]": this.chooserSelectedItems.keys()
-        };
-        
-        $("product_sku").value = this.chooserSelectedItems.keys().join(",");           
-        
-        
-      
-       
-    }
-    
-   
+        else  
+        {
+            if($("product_sku").value ===  a.value)
+            {
+                $("product_sku").value = '';
+            }
+            else
+            {
+                var splitSkus = jQuery("#product_sku").val().split(',');
+                jQuery.each(splitSkus,function(index,skuValue)
+                {
+                    if(skuValue === a.value)
+                    {
+                        splitSkus.splice(index,1);
+                    }
+                });
+                $("product_sku").value = '';
+                $("product_sku").value = splitSkus.join(',');
+            }
+        }
+    }  
 };
 
 
