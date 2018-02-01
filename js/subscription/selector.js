@@ -259,8 +259,6 @@ VarienRulesForm.prototype = {
         }
     },
     chooserGridRowClick: function (b, d) {
-       
-        
         var f = Event.findElement(d, "tr");
         var a = Event.element(d).tagName == "INPUT";
         if (f) {
@@ -269,8 +267,7 @@ VarienRulesForm.prototype = {
                 var c = a ? e[0].checked : !e[0].checked;
                 b.setCheckboxChecked(e[0], c)
             }
-        }
-        
+        }        
     },
     chooserGridCheckboxCheck: function (b, a, c) { 
         if (c && a.value!=='on') 
