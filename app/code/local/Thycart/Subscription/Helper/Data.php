@@ -12,7 +12,6 @@ class Thycart_Subscription_Helper_Data extends Mage_Core_Helper_Abstract
 			$units[$key]['value'] = $value['unit_id']; 
 			$units[$key]['label'] = ucwords($value['subscription_unit']);
 		}
-		// echo "<pre>";print_r($units);die;
 		$finalArr['value'] = $units;
 		$finalArr['label'] = 'Please Select Unit';
 		return $finalArr;
@@ -20,11 +19,3 @@ class Thycart_Subscription_Helper_Data extends Mage_Core_Helper_Abstract
 	}
 }
 
-// 'values' => array(
-
-// 	'1' => array(
-// 		'value'=> array( ),
-// 		'label' => 'Size'    
-// 	),                                        
-
-// )

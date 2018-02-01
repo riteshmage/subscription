@@ -47,7 +47,7 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Edit_Tab_Form extends Ma
 			'name'      => 'active',
 			'required'  => true,
 			'class' => 'required-entry',
-			'values' => array(''=>'Please select','1'=>'Yes','2'=>'No'),
+			'values' => array(''=>'Please select','1'=>'Yes','0'=>'No'),
 			'after_element_html' => '<small>please select to show on frontend </small>'
 		));
 		$fieldset->addField('unit', 'multiselect', array(
