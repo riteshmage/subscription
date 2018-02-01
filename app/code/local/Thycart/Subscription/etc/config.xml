@@ -50,6 +50,9 @@
 					<unit>
 						<table>unit_master</table>
 					</unit>
+					<subscriptioncustomer>
+						<table>subcription_customer</table>
+					</subscriptioncustomer>
 				</entities>
 			</subscription_resource>
 		</models>
