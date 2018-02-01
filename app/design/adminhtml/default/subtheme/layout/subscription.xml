@@ -20,4 +20,9 @@
 			</block>
 		</reference>
 	</subscription_adminhtml_index_index>
+	<subscription_adminhtml_unit_index>
+		<reference name="content">
+			<block type="blk_subscription/adminhtml_unit" name="unit" />
+		</reference>
+	</subscription_adminhtml_unit_index>
 </layout>

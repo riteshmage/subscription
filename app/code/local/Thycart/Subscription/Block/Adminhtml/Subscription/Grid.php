@@ -36,7 +36,7 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Grid extends Mage_Adminh
 			'width'     => '50px',
 			'index'     => 'created_time',
 		));
-		$this->addColumn('Active',array(
+		$this->addColumn('active',array(
 			'header'    => Mage::helper('subscription')->__('Active'),
 			'align'     =>'center',
 			'width'     => '50px',
@@ -52,17 +52,14 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Grid extends Mage_Adminh
 
 	protected function _prepareMassaction()
 	{
-		if($this->getRequest()->getPost())
-		{
-			$this->setMassactionIdField('id');
-			$this->getMassactionBlock()->setFormFieldName('ids');
-			$this->getMassactionBlock()->setUseSelectAll(true);
-			$this->getMassactionBlock()->addItem('remove_rule', array(
-				'label'=> Mage::helper('subscription')->__('Remove Rule'),
-				'url'  => $this->getUrl('*/adminhtml_index/massRemove'),
-				'confirm' => Mage::helper('message')->__('Are you sure?')
-			));
-		}
+		$this->setMassactionIdField('id');
+		$this->getMassactionBlock()->setFormFieldName('ids');
+		$this->getMassactionBlock()->setUseSelectAll(true);
+		$this->getMassactionBlock()->addItem('remove_rule', array(
+			'label'=> Mage::helper('subscription')->__('Remove Rule'),
+			'url'  => $this->getUrl('*/adminhtml_index/massRemove'),
+			'confirm' => Mage::helper('subscription')->__('Are you sure?')
+		));
 		return $this;
 	}
 }
