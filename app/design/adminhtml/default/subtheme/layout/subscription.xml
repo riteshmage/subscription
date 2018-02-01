@@ -25,4 +25,9 @@
 			<block type="blk_subscription/adminhtml_unit" name="unit" />
 		</reference>
 	</subscription_adminhtml_unit_index>
+	<subscription_adminhtml_customer_index>
+		<reference name="content">
+			<block type="blk_subscription/adminhtml_customer" name="customer" />
+		</reference>
+	</subscription_adminhtml_customer_index>
 </layout>
