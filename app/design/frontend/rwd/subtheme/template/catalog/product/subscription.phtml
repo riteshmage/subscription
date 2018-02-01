@@ -1,17 +1,27 @@
 <?php 
-if($this->subscrptionStatus($this->getProductid())){ ?>
+if($this->subscrptionStatus($this->getProductid()))
+{ ?>
 <div id="div_subscription">
-	<?php 
-		$discountDetails = $this->discountDetail();
-		// echo "<pre>";print_r($discountDetails);die;
-		if(!empty($discountDetails)){
+<?php 
+	$discountDetails = $this->discountDetail();
+	if(!empty($discountDetails))
+	{
+		$disText = Thycart_Subscription_Block_Subscription::DISCOUNT_CONFIG;
+		$currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
+		$currency = Mage::app()->getLocale()->currency($currencyCode)->getSymbol(); 
 	?>
 	Subscrption:-
 	<select>
 		<option value="">Select for subscription</option>
-		<?php foreach($discountDetails as $key => $value) { ?>
-		<option value="<?php $key ?>"><?php echo $value['subscription_unit'].'-'.$value['discount_type'].'--'.$value['discount_value']; ?> </option>
-		<?php } ?>
+		<?php foreach($discountDetails as $detail) { ?>
+			<?php foreach($detail['available_units'] as $key=>$unit) { ?>
+			<option value="<?php echo $key ?>">
+				<?php echo $unit.' - '.$currency.$detail['discount_value'].$disText[$detail['discount_type']]; ?>
+			</option>
+			<?php } 
+		} ?>
 	</select>
 </div>
-<?php } } ?>
+<?php 
+	} 
+} ?>
