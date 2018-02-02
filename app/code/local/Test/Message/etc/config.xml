@@ -87,11 +87,6 @@
             <message>
                 <class>Test_Message_Block</class>
             </message>
-            <customer>
-                <rewrite>
-                    <form_register>Test_Message_Block</form_register>
-                </rewrite>
-            </customer>
         </blocks>
         <models>
             <message>
