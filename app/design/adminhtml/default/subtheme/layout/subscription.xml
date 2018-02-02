@@ -1,33 +1,33 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-	<subscription_adminhtml_index_edit>	
+	<admin_subscription_adminhtml_index_edit>	
 		<reference name="head"> 
 			<action method="addJs"><script>lib/jquery/jquery-1.10.2.min.js</script></action>
             <action method="addJs"><script>lib/jquery/noconflict.js</script></action>
 			<action method="addJs"><script>subscription/selector.js</script></action>
 		</reference>
-	</subscription_adminhtml_index_edit>
-	<subscription_adminhtml_index_new>	
+	</admin_subscription_adminhtml_index_edit>
+	<admin_subscription_adminhtml_index_new>	
 		<reference name="head"> 
 			<action method="addJs"><script>lib/jquery/jquery-1.10.2.min.js</script></action>
             <action method="addJs"><script>lib/jquery/noconflict.js</script></action>
 			<action method="addJs"><script>subscription/selector.js</script></action>
 		</reference>
-	</subscription_adminhtml_index_new>
-	<subscription_adminhtml_index_index>
+	</admin_subscription_adminhtml_index_new>
+	<admin_subscription_adminhtml_index_index>
 		<reference name="content">
 			<block type="blk_subscription/adminhtml_subscription" name="subscription">
 			</block>
 		</reference>
-	</subscription_adminhtml_index_index>
-	<subscription_adminhtml_unit_index>
+	</admin_subscription_adminhtml_index_index>
+	<admin_subscription_adminhtml_unit_index>
 		<reference name="content">
 			<block type="blk_subscription/adminhtml_unit" name="unit" />
 		</reference>
-	</subscription_adminhtml_unit_index>
-	<subscription_adminhtml_customer_index>
+	</admin_subscription_adminhtml_unit_index>
+	<admin_subscription_adminhtml_customer_index>
 		<reference name="content">
 			<block type="blk_subscription/adminhtml_customer" name="customer" />
 		</reference>
-	</subscription_adminhtml_customer_index>
+	</admin_subscription_adminhtml_customer_index>
 </layout>

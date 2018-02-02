@@ -10,13 +10,13 @@
 	<frontend>
 
 		<routers>
-			<thycart_subscription>
+			<subscription>
 				<use>standard</use>
 				<args>
 					<module>Thycart_Subscription</module>
 					<frontName>subscription</frontName>
 				</args>
-			</thycart_subscription>
+			</subscription>
 		</routers>
 
 		<layout>
@@ -31,13 +31,13 @@
 
 	<admin>
 		<routers>
-			<subscription>
+			<admin_subscription>
 				<use>admin</use>
 				<args>
 					<module>Thycart_Subscription</module>
 					<frontName>admin_subscription</frontName>
 				</args>
-			</subscription>
+			</admin_subscription>
 		</routers>		
 	</admin>
 

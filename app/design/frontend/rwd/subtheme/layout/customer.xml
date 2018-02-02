@@ -237,7 +237,7 @@ Customer account pages, rendered for all tabs in dashboard
                 <action method="addLink" translate="label" module="customer"><name>address_book</name><path>customer/address/</path><label>Address Book</label></action>
                 <action method="addLink" translate="label" module="customer">
                     <name>Subscriptions</name>
-                    <path>thycart_subscription/index/subscription</path>
+                    <path>subscription/index/subscription</path>
                     <label>My Subscriptions</label>
                 </action>
             </block>
