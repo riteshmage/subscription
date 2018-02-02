@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<thycart_subscription_index_subscription>
+		<label>Subscription.</label>
+		<reference name="content" >
+			<block type="message/index" name="" template="message/add.phtml" />
+		</reference>
+	</thycart_subscription_index_subscription>
+</layout>
