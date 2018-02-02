@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
 	<thycart_subscription_index_subscription>
+		<update handle="customer_account"/>
 		<label>Subscription.</label>
-		<reference name="content" >
-			<block type="message/index" name="" template="message/add.phtml" />
+		<reference name="my.account.wrapper">
+			<block type="blk_subscription/subscriptionList" template=""/>
 		</reference>
 	</thycart_subscription_index_subscription>
 </layout>

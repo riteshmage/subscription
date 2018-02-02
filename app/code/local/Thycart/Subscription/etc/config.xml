@@ -1,10 +1,34 @@
 <?xml version="1.0"?>
 <config>
+
 	<modules>
 		<Thycart_Subscription>
 			<version>0.1.0</version>
 		</Thycart_Subscription>
 	</modules>
+
+	<frontend>
+
+		<routers>
+			<thycart_subscription>
+				<use>standard</use>
+				<args>
+					<module>Thycart_Subscription</module>
+					<frontName>subscription</frontName>
+				</args>
+			</thycart_subscription>
+		</routers>
+
+		<layout>
+            <updates>
+                <thycart_subscription>
+                    <file>subscription.xml</file>
+                </thycart_subscription>
+            </updates>
+        </layout>
+
+	</frontend>
+
 	<admin>
 		<routers>
 			<subscription>
@@ -16,6 +40,7 @@
 			</subscription>
 		</routers>		
 	</admin>
+
 	<adminhtml>
 		<layout>
 			<updates>
@@ -25,6 +50,7 @@
 			</updates>
 		</layout>
 	</adminhtml>
+
 	<global>
 		<blocks>
 			<blk_subscription>
@@ -77,4 +103,5 @@
 			</subscription_read>
 		</resources>
 	</global>
+
 </config>
