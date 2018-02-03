@@ -8,7 +8,6 @@
 	</modules>
 
 	<frontend>
-
 		<routers>
 			<subscription>
 				<use>standard</use>
@@ -17,8 +16,14 @@
 					<frontName>subscription</frontName>
 				</args>
 			</subscription>
+			<checkout>
+				<args>
+					<modules>
+						<thycart_subscription before="Mage_Checkout">Thycart_Subscription</thycart_subscription>
+					</modules>
+				</args>
+			</checkout>
 		</routers>
-
 		<layout>
             <updates>
                 <thycart_subscription>
