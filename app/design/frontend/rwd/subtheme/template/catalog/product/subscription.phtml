@@ -21,16 +21,9 @@ if($this->subscrptionStatus($this->getProductid()))
 			<?php } 
 		} ?>
 	</select>
-	<button id='subscription'>Subscribe Now</button>
+	<button type="button" title="Subscribe" id="btnSubscription" class="button btn-cart" onclick="productAddToCartForm.submit(this,'btnSubscription')">Subscribe</button>
 </div>
 <?php 
 	} 
 }
 ?>
-<script type="text/javascript">
-	jQuery('#subscription').click(function()
-	{
-		window.location.href="<?php echo Mage::getUrl('subscription/index/checkout'); ?>";
-		return false;
-	});
-</script>
