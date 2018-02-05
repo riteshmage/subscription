@@ -99,6 +99,18 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 					$postData['product_sku'] = $sku;
 					$postData['unit']        = $unit;
 				}
+				$checkEntry = Mage::getSingleton('subscription/master')
+				->getCollection()
+				->addFieldToFilter('product_id',array('finset'=> $postData['product_id']))
+				->addFieldToFilter('unit',array('finset'=> $postData['unit']))
+				->addFieldToFilter('active',1)
+				->getData();
+				if (!empty($checkEntry) && empty($this->getRequest()->getParam('id')))
+				{
+					Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Rule alredy exists'));
+					$this->_redirect('*/*/');
+					exit;
+				};
 				$model->addData($postData);
 				$model->save();
 
