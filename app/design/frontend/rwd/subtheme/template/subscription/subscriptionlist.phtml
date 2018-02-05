@@ -1,0 +1,38 @@
+<?php
+$lists = $this->getSubscription();
+if(empty($lists)) { ?>
+	<p><?php echo $this->__('You have placed no subscription.'); ?></p>
+<?php } ?>
+<div class="page-title">
+    <h1><?php echo $this->__('My Subscriptions') ?></h1>
+</div>
+<?php echo $this->getPagerHtml(); ?>
+<table class="data-table subscription" id="subscription-table">
+    <col width="1" />
+    <col width="1" />
+    <col />
+    <col width="1" />
+    <col width="1" />
+    <thead>
+        <tr>
+            <th class="number"><?php echo $this->__('Sr. #') ?></th>
+            <th class="date"><?php echo $this->__('Date') ?></th>
+            <th class="product"><?php echo $this->__('Product') ?></th>
+            <th class="unit"><span class="nobr"><?php echo $this->__('Unit') ?></span></th>
+            <th class="status"><span class="nobr"><?php echo $this->__('Status') ?></span></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($lists as $key=>$list): ?>
+        <tr>
+            <td class="number"><?php echo $key+1; ?></td>
+            <td class="date"><span class="nobr"><?php echo $this->formatDate($list['start_date']) ?></span></td>
+            <td class="product"><?php echo $this->escapeHtml('test') ?></td>
+            <td class="unit"><?php echo $list['unit_selected'] ?></td>
+            <td class="status"><em><?php echo '2' ?></em></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<script type="text/javascript">decorateTable('subscription-table');</script>
+<?php echo $this->getPagerHtml(); ?>

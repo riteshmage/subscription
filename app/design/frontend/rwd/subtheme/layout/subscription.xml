@@ -4,7 +4,7 @@
 		<update handle="customer_account"/>
 		<label>Subscription.</label>
 		<reference name="my.account.wrapper">
-			<block type="blk_subscription/subscriptionList" template=""/>
+			<block type="blk_subscription/subscriptionlist" template="subscription/subscriptionlist.phtml"/>
 		</reference>
 	</subscription_index_subscription>
 </layout>
