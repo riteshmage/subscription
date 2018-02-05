@@ -84,6 +84,9 @@
 					<subscriptioncustomer>
 						<table>subcription_customer</table>
 					</subscriptioncustomer>
+					<unitproductmapping>
+						<table>unit_product_mapping</table>
+					</unitproductmapping>
 				</entities>
 			</subscription_resource>
 		</models>
