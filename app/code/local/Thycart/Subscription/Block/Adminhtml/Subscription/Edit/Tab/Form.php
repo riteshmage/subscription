@@ -12,51 +12,53 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Edit_Tab_Form extends Ma
 			'label'     => Mage::helper('subscription')->__('Rule name'),
 			'name'      => 'subscription_name',
 			'required'  => true,
-			'class' => 'required-entry',
+			'class' 	=> 'validate-code validate-no-html-tags required-entry',
 			'after_element_html' => '<small>Add (productName)_(weekly/monthly/yearly)</small>'
 		));
 		$fieldset->addField('max_billing_cycle', 'text', array(
 			'label'     => Mage::helper('subscription')->__('Max billing cycles allowed'),
 			'name'      => 'max_billing_cycle',
-			'value'		=> 2,
+			'class'		=> 'validate-digits-range digits-range-10-20 validate-no-html-tags',
+			'value'		=>	2,
 			'after_element_html' => '<small>Number of cyles allowed to subscription</small>'
 		));
-		$fieldset->addField('show_start_date', 'radios', array(
-			'label'     => Mage::helper('subscription')->__('Allow user to select start date'),
-			'name'      => 'show_start_date',
-			'values' => array(
-				array('value'=>'0','label'=>'yes'),
-				array('value'=>'1','label'=>'no')
-			),
-		));
+		// $fieldset->addField('show_start_date', 'radios', array(
+		// 	'label'     => Mage::helper('subscription')->__('Allow user to select start date'),
+		// 	'name'      => 'show_start_date',
+		// 	'values' => array(
+		// 		array('value'=>'0','label'=>'yes'),
+		// 		array('value'=>'1','label'=>'no')
+		// 	),
+		// ));
 		$fieldset->addField('discount_type', 'select', array(
-			'label'     => Mage::helper('subscription')->__('Discount Type'),
-			'name'      => 'discount_type',
-			'required'  => true,
-			'class' => 'required-entry',
-			'values' => array(''=>'Please Select..','1' => 'Fixed','2' => 'percentage'),
+			'label'     => 	Mage::helper('subscription')->__('Discount Type'),
+			'name'      => 	'discount_type',
+			'required'  => 	true,
+			'class' 	=> 	'validate-select required-entry',
+			'values' 	=> 	array(''=>'Please Select..','1' => 'Fixed','2' => 'percentage'),
 			'after_element_html' => '<small>Select discount type (fixed or %)</small>'
 		));
 		$fieldset->addField('discount_value', 'text', array(
-			'label'     => Mage::helper('subscription')->__('Discount value'),
-			'name'      => 'discount_value',
+			'label'     => 	Mage::helper('subscription')->__('Discount value'),
+			'name'      => 	'discount_value',
+			'class'		=> 	'validate-digits-range digits-range-0-100 validate-no-html-tags',
 			'after_element_html' => '<small>Enter Discount Amount or %</small>'
 		));	
 		$fieldset->addField('active', 'select', array(
-			'label'     => Mage::helper('subscription')->__('Active'),
-			'name'      => 'active',
-			'required'  => true,
-			'class' => 'required-entry',
-			'values' => array(''=>'Please select','1'=>'Yes','0'=>'No'),
+			'label'     => 	Mage::helper('subscription')->__('Active'),
+			'name'      => 	'active',
+			'required'  => 	true,
+			'class' 	=> 	'validate-select required-entry',
+			'values' 	=> 	array(''=>'Please select','1'=>'Yes','0'=>'No'),
 			'after_element_html' => '<small>please select to show on frontend </small>'
 		));
 		$fieldset->addField('unit', 'multiselect', array(
-			'label'     => Mage::helper('subscription')->__('Unit'),
-			'name'      => 'unit',
-			'required'  => true,
-			'class' => 'required-entry',
+			'label'     => 	Mage::helper('subscription')->__('Unit'),
+			'name'      => 	'unit',
+			'required'  => 	true,
+			'class' 	=> 	'validate-select required-entry',
+			'values'	=>	array(Mage::helper('subscription')->getUnitMaster()),
 			'after_element_html' => '<small>select subscription type</small>',
-			'values' => array(Mage::helper('subscription')->getUnitMaster())					,
 		));
 		if (Mage::getSingleton('adminhtml/session')->getSubscriptionData())
 		{
