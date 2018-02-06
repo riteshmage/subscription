@@ -1,6 +1,8 @@
 <?php
 class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Controller_Action
 {
+	private $exceptionMsg = 'Error Processing Request. Try again.';
+
 	protected function _isAllowed()
 	{
 		return true;
@@ -70,8 +72,13 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 		$postData = $this->getRequest()->getPost();
 		$postData = $this->validateFilterData($postData);
 
+		$connection = Mage::getSingleton('core/resource')
+			->getConnection('core_write');
+
 		try 
 		{
+			$connection->beginTransaction();
+
 			$productIdArray = array();
 			
 			$model = Mage::getModel('subscription/master');
@@ -108,11 +115,11 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 			$postData['product_sku'] = $sku;
 			$postData['unit']        = $unit;
 			
+			$mappingExist =$this->mappingExist($productIdArray, $unitArr);
+
 			if($this->getRequest()->getParam('active'))
 			{
-				$mappingModel = Mage::getSingleton('subscription/unitproductmapping');
-				$mappingExist =$this->mappingExist($productIdArray, $unitArr, $mappingModel);
-				if (!empty($mappingExist))
+				if($mappingExist)
 				{
 					Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Rule alredy exists'));
 					$this->_redirect('*/*/');
@@ -123,13 +130,19 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 				$model->save();
 				$lastId = $model->getId();
 
-				$this->saveMappingData($productIdArray, $unitArr, $mappingModel, $lastId);
+				$this->saveMappingData($productIdArray, $unitArr, $lastId);
 			}
 			else
 			{
+				if($mappingExist && $this->getRequest()->getParam('id'))
+				{
+					$this->deleteMappingData($this->getRequest()->getParam('id'));
+				}
 				$model->addData($postData);
 				$model->save();
 			}
+
+			$connection->commit();
 
 			Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Rule successfully saved'));
 			Mage::getSingleton('adminhtml/session')->setSubscriptionData(false);
@@ -143,6 +156,8 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 		}
 		catch (Exception $e)
 		{
+			$connection->rollback();
+
 			Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 			Mage::getSingleton('adminhtml/session')->setSubscriptionData($this->getRequest()->getPost());
 			$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
@@ -213,54 +228,94 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 		}
 	}
 
-	public function mappingExist($productIdArray, $unitArr, $mappingModel)
+	public function mappingExist($productIdArray, $unitArr)
 	{
-		if(empty($productIdArray) || empty($unitArr) || empty($mappingModel))
+		if(empty($productIdArray) || empty($unitArr))
 		{
 			return true;
 		}
-
-		$checkMapping = $mappingModel->getCollection()
-		->addFieldToFilter('product_id',array('in'=> $productIdArray))
-		->addFieldToFilter('unit_id',array('in'=> $unitArr))
-		->addFieldToFilter('active',1);
-		if($this->getRequest()->getParam('id') > 0)
+		try
 		{
-			$checkMapping->addFieldToFilter(
-				'subscription_id',
-				array(
-					'nin'=>array($this->getRequest()->getParam('id'))
-				)
-			);
+			$mappingModel = Mage::getModel('subscription/unitproductmapping');
+			$checkMapping = $mappingModel->getCollection()
+			->addFieldToFilter('product_id',array('in'=> $productIdArray))
+			->addFieldToFilter('unit_id',array('in'=> $unitArr))
+			->addFieldToFilter('active',1);
+			if($this->getRequest()->getParam('id') > 0 && $this->getRequest()->getParam('active') > 0)
+			{
+				$checkMapping->addFieldToFilter(
+					'subscription_id',
+					array(
+						'nin'=>array($this->getRequest()->getParam('id'))
+					)
+				);
+			}
+			$mappingData = $checkMapping->getData();
+			return $mappingData;
 		}
-		$mappingData = $checkMapping->getData();
-
-		return $mappingData;
+		catch(Exception $e)
+		{
+			throw new Exception($this->exceptionMsg);die;
+		}
 	}
 
-	public function saveMappingData($productIdArray, $unitArr, $mappingModel, $subscriptionId)
+	public function saveMappingData($productIdArray, $unitArr, $subscriptionId)
 	{
-		if(empty($productIdArray) || empty($unitArr) || empty($mappingModel) || empty($subscriptionId))
+		if(empty($productIdArray) || empty($unitArr) || empty($subscriptionId))
 		{
 			return false;
 		}
-
-		foreach ($productIdArray as $productkey => $productValue) 
+		
+		foreach ($productIdArray as $productId) 
 		{
-			foreach ($unitArr as $unitkey => $unitValue) 
+			foreach ($unitArr as $unitId) 
 			{
 				$data = array();
 				$data = array(
-					'product_id'=>$productValue,
-					'unit_id'=>$unitValue,
+					'product_id'=>$productId,
+					'unit_id'=>$unitId,
 					'subscription_id'=>$subscriptionId,
 					'active'=>1
 				);
-				
-				$mappingModel->addData($data);
-				$mappingModel->save();
+				try
+				{
+					$mappingModel = Mage::getModel('subscription/unitproductmapping');
+					$mappingModel->addData($data);
+					$mappingModel->save();
+				}
+				catch (Exception $e) 
+				{		
+					//ignore unique constraint error for product_id,unit_id,subscription_id,active 
+					if($e->getCode() !== 23000)
+					{
+						throw new Exception($this->exceptionMsg);die;		
+					}
+				}
 			}
 		}
-		return true;
+	}
+
+	public function deleteMappingData($subscriptionId)
+	{
+		if(empty($subscriptionId))
+		{
+			return false;
+		}
+		try
+		{
+			$mappingModel = Mage::getModel('subscription/unitproductmapping');
+			$mapping = $mappingModel->getCollection()
+			->addFieldToFilter('subscription_id',$subscriptionId);
+
+			foreach ($mapping as $value) 
+			{
+				$value->delete();
+			}
+			return true;
+		}
+		catch (Exception $e) 
+		{				
+			throw new Exception($this->exceptionMsg);die;		
+		}
 	}
 }
