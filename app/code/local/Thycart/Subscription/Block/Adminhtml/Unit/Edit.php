@@ -8,7 +8,7 @@ class Thycart_Subscription_Block_Adminhtml_Unit_Edit extends Mage_Adminhtml_Bloc
 		$this->_controller = 'adminhtml_unit';
 		parent::__construct();
 
-		$this->_updateButton('save', 'label', Mage::helper('subscription')->__('Save Rule'));
+		$this->_updateButton('save', 'label', Mage::helper('subscription')->__('Save Unit'));
 		$this->_addButton('save_and_continue_edit', array(
 			"label"     => Mage::helper('subscription')->__('Save And Continue Edit'),
 			"onclick"   => 'saveAndContinueEdit()',

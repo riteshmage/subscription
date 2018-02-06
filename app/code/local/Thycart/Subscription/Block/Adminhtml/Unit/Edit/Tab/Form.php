@@ -11,14 +11,14 @@ class Thycart_Subscription_Block_Adminhtml_Unit_Edit_Tab_Form extends Mage_Admin
 			'label'     => Mage::helper('subscription')->__('Unit name'),
 			'name'      => 'subscription_unit',
 			'required'  => true,
-			'class' => 'required-entry',
+			'class' 	=> 'validate-code validate-no-html-tags required-entry',
 			'after_element_html' => '<small>Add Name</small>'
 		));
 		$fieldset->addField('active', 'select', array(
 			'label'     => Mage::helper('subscription')->__('Active'),
 			'name'      => 'active',
 			'required'  => true,
-			'class' => 'required-entry',
+			'class'     => 'validate-select required-entry',
 			'values' => array(''=>'Please select','1'=>'Yes','0'=>'No'),
 			'after_element_html' => '<small>please select to activate subscription unit</small>'
 		));
