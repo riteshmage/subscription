@@ -3,6 +3,11 @@ class Thycart_Subscription_IndexController extends Mage_Core_Controller_Front_Ac
 {
 	protected function subscriptionAction()
 	{
+		if(!Mage::getSingleton('customer/session')->isLoggedIn()) 
+		{
+			$this->_redirect('/');
+			return;
+		}
 		$this->loadLayout();
 		$this->renderLayout();
 	}
