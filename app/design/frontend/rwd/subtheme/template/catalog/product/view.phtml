@@ -192,38 +192,38 @@
 </div>
 <script type="text/javascript">
     //<![CDATA[
-        productAddToCartForm.submit = function(frm,id,event){
-        if(id === 'btnSubscription')
+        productAddToCartForm.submit = function(frm,id,event)
         {
-            url = this.form.action;
-            var replaceURL = url.replace("add/","myadd/");
-            console.log(replaceURL);
-            this.form.action = replaceURL;
-            if(this.validator) {
-                var nv = Validation.methods;
-                delete Validation.methods['required-entry'];
-                delete Validation.methods['validate-one-required'];
-                delete Validation.methods['validate-one-required-by-name'];
-                // Remove custom datetime validators
-                for (var methodName in Validation.methods) {
-                    if (methodName.match(/^validate-datetime-.*/i)) {
-                        delete Validation.methods[methodName];
+            if(id === 'btnSubscription')
+            {
+                url = this.form.action;
+                var replaceURL = url.replace("add/","myadd/");
+                this.form.action = replaceURL;
+                if(this.validator) {
+                    var nv = Validation.methods;
+                    delete Validation.methods['required-entry'];
+                    delete Validation.methods['validate-one-required'];
+                    delete Validation.methods['validate-one-required-by-name'];
+                    // Remove custom datetime validators
+                    for (var methodName in Validation.methods) {
+                        if (methodName.match(/^validate-datetime-.*/i)) {
+                            delete Validation.methods[methodName];
+                        }
                     }
-                }
 
-                if (this.validator.validate()) {
-                    if (url) {
-                        this.form.action = replaceURL;
+                    if (this.validator.validate()) {
+                        if (url) {
+                            this.form.action = replaceURL;
+                        }
+                        this.form.submit();
                     }
-                    this.form.submit();
+                    Object.extend(Validation.methods, nv);
                 }
-                Object.extend(Validation.methods, nv);
             }
-        }
-        else
-        {
-            this.form.submit();
-        }
+            else
+            {
+                this.form.submit();
+            }
         }.bind(productAddToCartForm);
         //]]>
 

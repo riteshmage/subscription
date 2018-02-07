@@ -110,6 +110,17 @@
 				</connection>
 			</subscription_read>
 		</resources>
+		<events>
+            <subscription_event>
+                <observers>
+                    <set_custom_discount>
+                        <type>singleton</type>
+                        <class>Thycart_Subscription_Model_Observer</class>
+                        <method>setDiscount</method>
+                    </set_custom_discount>
+                </observers>
+            </subscription_event>
+        </events>
 	</global>
 
 </config>

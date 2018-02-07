@@ -52,10 +52,13 @@ class Thycart_Subscription_CartController extends Mage_Checkout_CartController
             /**
              * @todo remove wishlist observer processAddToCart
              */
+            $quote = Mage::getModel('checkout/cart')->getQuote();
             Mage::dispatchEvent('checkout_cart_add_product_complete',
             	array('product' => $product, 'request' => $this->getRequest(), 'response' => $this->getResponse())
             );
-
+             Mage::dispatchEvent('subscription_event',
+                array('request' => $this->getRequest(),'quote'=>$quote)
+            );
             if (!$this->_getSession()->getNoCartRedirect(true)) {
             	if (!$cart->getQuote()->getHasError()) {
             		$message = $this->__('%s was added to your shopping cart.', Mage::helper('core')->escapeHtml($product->getName()));
