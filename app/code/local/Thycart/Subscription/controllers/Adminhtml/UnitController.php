@@ -74,8 +74,21 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 					$id = $this->getRequest()->getParam('id');
 					$model->load($id);
 				}
-				$model->addData($postData);
-				$model->save();
+				try
+				{
+					$model->addData($postData);
+					$model->save();
+				}
+				catch(Exception $e)
+				{
+					if($e->getCode() === 23000)
+					{
+						throw new Exception("Please provide unique Unit name");
+						return;
+					}
+					throw new Exception("Error processing request");
+					return;
+				}
 
 				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Unit successfully saved'));
 				Mage::getSingleton('adminhtml/session')->setSubscriptionData(false);

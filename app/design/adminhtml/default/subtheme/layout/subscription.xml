@@ -1,16 +1,21 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
+
+	<default>
+	    <reference name="head">
+	        <action method="addJs"><script>lib/jquery/jquery-1.10.2.min.js</script></action>
+	        <action method="addJs"><script>lib/jquery/noconflict.js</script></action>
+	        <action method="addJs"><script>subscription/subscription.js</script></action>
+	    </reference>
+	</default>
+	
 	<admin_subscription_adminhtml_index_edit>	
-		<reference name="head"> 
-			<action method="addJs"><script>lib/jquery/jquery-1.10.2.min.js</script></action>
-            <action method="addJs"><script>lib/jquery/noconflict.js</script></action>
+		<reference name="head">
 			<action method="addJs"><script>subscription/selector.js</script></action>
 		</reference>
 	</admin_subscription_adminhtml_index_edit>
 	<admin_subscription_adminhtml_index_new>	
-		<reference name="head"> 
-			<action method="addJs"><script>lib/jquery/jquery-1.10.2.min.js</script></action>
-            <action method="addJs"><script>lib/jquery/noconflict.js</script></action>
+		<reference name="head">
 			<action method="addJs"><script>subscription/selector.js</script></action>
 		</reference>
 	</admin_subscription_adminhtml_index_new>
