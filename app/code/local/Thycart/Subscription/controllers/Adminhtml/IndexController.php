@@ -186,15 +186,19 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 	public function deleteAction()
 	{
 		if( $this->getRequest()->getParam('id') > 0 ) {
-			try {
+			try 
+			{
 				$model = Mage::getModel('subscription/master');
 
 				$model->setId($this->getRequest()->getParam('id'))
 				->delete();
 
+				$this->deleteMappingData($this->getRequest()->getParam('id'));
+
 				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Rule successfully deleted'));
 				$this->_redirect('*/*/');
-			} catch (Exception $e) {
+			} 
+			catch (Exception $e) {
 				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 				$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
 			}

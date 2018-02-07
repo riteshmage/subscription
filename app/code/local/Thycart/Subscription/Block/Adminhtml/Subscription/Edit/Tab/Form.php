@@ -12,13 +12,13 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Edit_Tab_Form extends Ma
 			'label'     => Mage::helper('subscription')->__('Rule name'),
 			'name'      => 'subscription_name',
 			'required'  => true,
-			'class' 	=> 'validate-code validate-no-html-tags required-entry',
-			'after_element_html' => '<small>Add (productName)_(weekly/monthly/yearly)</small>'
+			'class' 	=> 'validate-no-html-tags required-entry',
+			'after_element_html' => '<small>Example Product Name_[weekly/monthly/yearly]</small>'
 		));
 		$fieldset->addField('max_billing_cycle', 'text', array(
 			'label'     => Mage::helper('subscription')->__('Max billing cycles allowed'),
 			'name'      => 'max_billing_cycle',
-			'class'		=> 'validate-digits-range digits-range-10-20 validate-no-html-tags',
+			'class'		=> 'validate-digits digits-range-1-20 validate-no-html-tags',
 			'value'		=>	2,
 			'after_element_html' => '<small>Number of cyles allowed to subscription</small>'
 		));
@@ -41,7 +41,7 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Edit_Tab_Form extends Ma
 		$fieldset->addField('discount_value', 'text', array(
 			'label'     => 	Mage::helper('subscription')->__('Discount value'),
 			'name'      => 	'discount_value',
-			'class'		=> 	'validate-digits-range digits-range-0-100 validate-no-html-tags',
+			'class'		=> 	'validate-digits validate-no-html-tags',
 			'after_element_html' => '<small>Enter Discount Amount or %</small>'
 		));	
 		$fieldset->addField('active', 'select', array(
