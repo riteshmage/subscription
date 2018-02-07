@@ -36,7 +36,7 @@ class Thycart_Subscription_Block_Subscriptionlist extends Mage_Core_Block_Templa
         parent::_prepareLayout();
 
         $pager = $this->getLayout()->createBlock('page/html_pager')
-        	->setLimit(1)
+        	->setLimit(10)
             ->setCollection($this->getSubscription());            
         $this->setChild('pager', $pager);
         $pager->toHtml();
