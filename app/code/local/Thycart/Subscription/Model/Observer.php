@@ -3,7 +3,7 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
 {
     public function setDiscount($observer)
     {
-        if(!isset($observer['request']) || !isset($observer['quote']))
+        if(!isset($observer['request']) || !isset($observer['quote']) )
         {
             return;
         }
@@ -13,6 +13,7 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
 
         if( (!isset($params['discount_value']) || empty($params['discount_value'])) || (!isset($params['discount_type']) || empty($params['discount_type'])) || (!isset($params['unit']) || empty($params['unit'])))
         {
+
             return ;
         }
 
