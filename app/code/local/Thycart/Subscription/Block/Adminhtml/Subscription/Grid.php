@@ -7,7 +7,7 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Grid extends Mage_Adminh
 		$this->setId('subscription_rule');
 		$this->setDefaultSort('subscription_id');
 		$this->setDefaultDir('ASC');
-		$this->setUseAjax(true);
+		$this->setUseAjax(false);
 		$this->setSaveParametersInSession(true);
 	}
 	protected function _prepareCollection()
@@ -41,9 +41,12 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Grid extends Mage_Adminh
 			'align'     =>'center',
 			'width'     => '50px',
 			'index'     => 'active',
+			'type'		=>'options',
+			'options'	=>array(
+							'1' => 'Yes',
+							'0' => 'No'
+			)
 		));
-		// $this->addExportType('*/*/exportCsv', Mage::helper('sales')->__('CSV')); 
-		// $this->addExportType('*/*/exportExcel', Mage::helper('sales')->__('Excel'));
 	}
 	public function getRowUrl($row)
 	{

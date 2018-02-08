@@ -7,7 +7,7 @@ class Thycart_Subscription_Block_Adminhtml_Customer_Grid extends Mage_Adminhtml_
 		$this->setId('subscribed_customer');
 		$this->setDefaultSort('id');
 		$this->setDefaultDir('ASC');
-		$this->setUseAjax(true);
+		$this->setUseAjax(false);
 		$this->setSaveParametersInSession(true);
 	}
 	protected function _prepareCollection()
@@ -59,6 +59,11 @@ class Thycart_Subscription_Block_Adminhtml_Customer_Grid extends Mage_Adminhtml_
 			'align'     =>'center',
 			'width'     => '50px',
 			'index'     => 'active',
+			'type'		=>'options',
+			'options'	=>array(
+							'1' => 'Yes',
+							'0' => 'No'
+			)
 		));
 	}
 	public function getRowUrl($row)
