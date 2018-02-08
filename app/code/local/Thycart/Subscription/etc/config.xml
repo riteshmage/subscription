@@ -111,7 +111,7 @@
 			</subscription_read>
 		</resources>
 		<events>
-            <subscription_event>
+            <sales_quote_collect_totals_after>
                 <observers>
                     <set_custom_discount>
                         <type>singleton</type>
@@ -119,7 +119,7 @@
                         <method>setDiscount</method>
                     </set_custom_discount>
                 </observers>
-            </subscription_event>
+            </sales_quote_collect_totals_after>
         </events>
 	</global>
 
