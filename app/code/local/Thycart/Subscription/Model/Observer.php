@@ -85,9 +85,46 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
                    $item->setDiscountAmount($disTotal);
                    $item->setBaseDiscountAmount($disTotal)->save();
                 }
-
-
            }
        }  
-   }
+    }
+    public function successfullySubscribed($observer)
+    {
+        $params =Mage::getSingleton('core/session')->getSubscriptionParam();
+        if(empty($params))
+        {
+            return;
+        }       
+        if(empty($observer))
+        {
+            return ;
+        }
+        $order      =   $observer->getOrderIds();
+        $orderId    =   array_values($order);
+        $unit       =   $params['unit'];
+        $date       =   Mage::getModel('core/date')->gmtDate('Y-m-d');
+        $customerId =   Mage::getSingleton('customer/session')->getId();
+        $productId  =   $params['product'];
+
+        $data       =   array(
+                                'start_date'=>$date,
+                                'last_date'=>$date,
+                                'unit_selected'=>$unit,
+                                'order_id'=>$orderId[0],
+                                'customer_id'=>$customerId,
+                                'number_of_orders_placed'=>1,
+                                'active'=>1
+                            );
+        try
+        {
+            $model = Mage::getSingleton('subscription/subscriptioncustomer');
+            $model->addData($data)
+                  ->save();         
+        }
+        catch(Mage_Core_Exception $e)
+        {
+           Mage::throwExceptoin('unable to subscried');
+           return; 
+        }
+    }       
 }

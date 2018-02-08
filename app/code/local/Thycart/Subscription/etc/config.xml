@@ -25,12 +25,12 @@
 			</checkout>
 		</routers>
 		<layout>
-            <updates>
-                <thycart_subscription>
-                    <file>subscription.xml</file>
-                </thycart_subscription>
-            </updates>
-        </layout>
+			<updates>
+				<thycart_subscription>
+					<file>subscription.xml</file>
+				</thycart_subscription>
+			</updates>
+		</layout>
 
 	</frontend>
 
@@ -111,16 +111,25 @@
 			</subscription_read>
 		</resources>
 		<events>
-            <sales_quote_collect_totals_after>
-                <observers>
-                    <set_custom_discount>
-                        <type>singleton</type>
-                        <class>Thycart_Subscription_Model_Observer</class>
-                        <method>setDiscount</method>
-                    </set_custom_discount>
-                </observers>
-            </sales_quote_collect_totals_after>
-        </events>
+			<sales_quote_collect_totals_after>
+				<observers>
+					<set_custom_discount>
+						<type>singleton</type>
+						<class>Thycart_Subscription_Model_Observer</class>
+						<method>setDiscount</method>
+					</set_custom_discount>
+				</observers>
+			</sales_quote_collect_totals_after>
+			<checkout_onepage_controller_success_action>
+				<observers>
+					<successful_subscription>
+						<type>singleton</type>
+						<class>Thycart_Subscription_Model_Observer</class>
+						<method>successfullySubscribed</method>
+					</successful_subscription>
+				</observers>
+			</checkout_onepage_controller_success_action>
+		</events>
 	</global>
 
 </config>
