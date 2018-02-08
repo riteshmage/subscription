@@ -107,13 +107,14 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
         $productId  =   $params['product'];
 
         $data       =   array(
-                                'start_date'=>$date,
-                                'last_date'=>$date,
-                                'unit_selected'=>$unit,
-                                'order_id'=>$orderId[0],
-                                'customer_id'=>$customerId,
+                                'start_date'    =>$date,
+                                'last_date'     =>$date,
+                                'unit_selected' =>$unit,
+                                'order_id'      =>$orderId[0],
+                                'product_id'    =>$productId,
+                                'customer_id'   =>$customerId,
                                 'number_of_orders_placed'=>1,
-                                'active'=>1
+                                'active'        =>1
                             );
         try
         {
