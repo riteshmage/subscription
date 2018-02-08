@@ -2,7 +2,8 @@
 $installer = $this;
 $installer->startSetup();
 
-$installer->run("CREATE TABLE `subscription_master` (
+$installer->run("DROP TABLE IF EXISTS `subscription_master`;
+	CREATE TABLE `subscription_master` (
   `subscription_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Subscription Id',
   `subscription_name` varchar(255) NOT NULL,
   `product_id` varchar(255) NOT NULL COMMENT 'Product Id',
@@ -22,7 +23,8 @@ $installer->run("CREATE TABLE `subscription_master` (
 
 ");
 
-$installer->run("CREATE TABLE `unit_master` (
+$installer->run("DROP TABLE IF EXISTS `unit_master`;
+	CREATE TABLE `unit_master` (
   `unit_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `subscription_unit` varchar(200) NOT NULL,
   `active` tinyint(4) unsigned NOT NULL DEFAULT '0',
@@ -33,7 +35,8 @@ $installer->run("CREATE TABLE `unit_master` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1
 ");
 
-$installer->run("CREATE TABLE `unit_product_mapping` (
+$installer->run("DROP TABLE IF EXISTS `unit_product_mapping`;
+	CREATE TABLE `unit_product_mapping` (
   `id` bigint(11) NOT NULL AUTO_INCREMENT,
   `product_id` bigint(11) NOT NULL,
   `unit_id` int(11) NOT NULL,
@@ -44,7 +47,8 @@ $installer->run("CREATE TABLE `unit_product_mapping` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1
 ");
 
-$installer->run("CREATE TABLE `subcription_customer` (
+$installer->run("DROP TABLE IF EXISTS `subcription_customer`;
+	CREATE TABLE `subcription_customer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `start_date` date NOT NULL,
   `last_date` date NOT NULL,
