@@ -49,4 +49,15 @@ class Thycart_Subscription_Block_Subscriptionlist extends Mage_Core_Block_Templa
         return $this->getChildHtml('pager');
     }
 
+    public function getProductByName($productId)
+    {
+    	if(empty($productId))
+    	{
+    		return false;
+    	}
+    	$storeId = Mage::app()->getStore()->getStoreId();
+    	$productName = Mage::getResourceModel('catalog/product')
+    			->getAttributeRawValue($productId, 'name', $storeId);
+    	return $productName;
+    }
 }

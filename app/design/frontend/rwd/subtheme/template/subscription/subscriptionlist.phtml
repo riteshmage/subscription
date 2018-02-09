@@ -1,5 +1,6 @@
 <?php
 $lists = $this->getSubscription();
+$statusArr = array(0=>'No',1=>'Yes');
 if(empty($lists)) { ?>
 	<p><?php echo $this->__('You have placed no subscription.'); ?></p>
 <?php } ?>
@@ -13,6 +14,7 @@ if(empty($lists)) { ?>
     <col />
     <col width="1" />
     <col width="1" />
+    <col width="1" />
     <thead>
         <tr>
             <th class="number"><?php echo $this->__('Sr. #') ?></th>
@@ -20,18 +22,25 @@ if(empty($lists)) { ?>
             <th class="product"><?php echo $this->__('Product') ?></th>
             <th class="unit"><span class="nobr"><?php echo $this->__('Unit') ?></span></th>
             <th class="status"><span class="nobr"><?php echo $this->__('Status') ?></span></th>
+            <th class="action"><span class="nobr"><?php echo $this->__('Action') ?></span></th>
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($lists as $key=>$list): ?>
+        <?php
+            $i=1; 
+            foreach ($lists as $key=>$list):
+        ?>
         <tr>
-            <td class="number"><?php echo $key+1; ?></td>
-            <td class="date"><span class="nobr"><?php echo $this->formatDate($list['start_date']) ?></span></td>
-            <td class="product"><?php echo $this->escapeHtml('test') ?></td>
-            <td class="unit"><?php echo $list['unit_selected'] ?></td>
-            <td class="status"><em><?php echo '2' ?></em></td>
+            <td class="number"><?php echo $i; ?></td>
+            <td class="date"><span class="nobr"><?php echo $this->formatDate($list['start_date']); ?></span></td>
+            <td class="product"><?php echo $this->getProductByName($list['product_id']); ?></td>
+            <td class="unit"><?php echo $list['unit_selected']; ?></td>
+            <td class="status"><em><?php echo $statusArr[$list['active']]; ?></em></td>
+            <td class="status">
+                <?php echo ($list['active'])?'Cancel':'-'; ?>                    
+            </td>
         </tr>
-        <?php endforeach; ?>
+        <?php $i++; endforeach; ?>
     </tbody>
 </table>
 <script type="text/javascript">decorateTable('subscription-table');</script>
