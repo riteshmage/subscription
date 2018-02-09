@@ -3,7 +3,7 @@
 class Thycart_Subscription_Block_Subscription extends Mage_Core_Block_Template
 {
 	const DISCOUNT_CONFIG = array(1=>' Fixed',2=>'% Off');
-	
+		
 	private $subscrptionData = array();
 	
 	public function discountDetail()
@@ -37,7 +37,7 @@ class Thycart_Subscription_Block_Subscription extends Mage_Core_Block_Template
 		}
 		catch(Exception $e)
 		{
-			throw new Exception("unable to fetch data");die;
+			throw new Exception("unable to fetch data");return;
 		}
 		
 		$unitArray = array_column($unitModel, 'subscription_unit','unit_id');
@@ -50,12 +50,16 @@ class Thycart_Subscription_Block_Subscription extends Mage_Core_Block_Template
 				$unitKeyArray = array();
 				$unitKeyArray = explode(',', $finalKey);
 				foreach ($unitKeyArray as $unitKey => $unit) {
+					if(isset($unitArray[$unit]))
 					$finalData[$finalKey]['available_units'][$unit] = $unitArray[$unit]; 
 				}
 			}
 			else
 			{
-				$finalData[$finalKey]['available_units'][$finalKey] = $unitArray[$finalKey];
+				if(isset($unitArray[$unit]))
+				{
+					$finalData[$finalKey]['available_units'][$finalKey] = $unitArray[$finalKey];
+				}
 			}
 		}
 		return $finalData;

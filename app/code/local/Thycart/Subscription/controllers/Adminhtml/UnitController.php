@@ -78,6 +78,11 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 				{
 					$model->addData($postData);
 					$model->save();
+					$lastId = $model->getId();
+					if(empty($postData['active']) && isset($id))
+					{
+						$this->deleteUnitMappingData($lastId);
+					}
 				}
 				catch(Exception $e)
 				{
@@ -127,6 +132,7 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 		}
 		$this->_redirect('*/*/');
 	}
+
 	public function deleteAction()
 	{
 		if( $this->getRequest()->getParam('id') > 0 )
@@ -136,6 +142,8 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 
 				$model->setId($this->getRequest()->getParam('id'))
 				->delete();
+
+				$this->deleteUnitMappingData($this->getRequest()->getParam('id'));
 
 				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Unit successfully deleted'));
 				$this->_redirect('*/*/');
@@ -147,5 +155,29 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 			}
 		}
 		$this->_redirect('*/*/');
+	}
+
+	function deleteUnitMappingData($unitId)
+	{
+		if(empty($unitId))
+		{
+			return false;
+		}
+		try
+		{
+			$mappingModel = Mage::getModel('subscription/unitproductmapping');
+			$mapping = $mappingModel->getCollection()
+			->addFieldToFilter('unit_id',$unitId);
+
+			foreach ($mapping as $value) 
+			{
+				$value->delete();
+			}
+			return true;
+		}
+		catch (Exception $e) 
+		{				
+			throw new Exception(Thycart_Subscription_Adminhtml_IndexController::EXCEPTION_MSG);return;		
+		}
 	}
 }

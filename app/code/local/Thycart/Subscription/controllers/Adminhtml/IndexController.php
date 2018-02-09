@@ -1,7 +1,7 @@
 <?php
 class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Controller_Action
 {
-	private $exceptionMsg = 'Error Processing Request. Try again.';
+	const EXCEPTION_MSG = 'Error Processing Request. Try again.';
 
 	protected function _isAllowed()
 	{
@@ -259,7 +259,7 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 		}
 		catch(Exception $e)
 		{
-			throw new Exception($this->exceptionMsg);die;
+			throw new Exception(Thycart_Subscription_Adminhtml_IndexController::EXCEPTION_MSG);return;
 		}
 	}
 
@@ -292,7 +292,7 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 					//ignore unique constraint error for product_id,unit_id,subscription_id,active 
 					if($e->getCode() !== 23000)
 					{
-						throw new Exception($this->exceptionMsg);die;		
+						throw new Exception(Thycart_Subscription_Adminhtml_IndexController::EXCEPTION_MSG);return;		
 					}
 				}
 			}
@@ -319,7 +319,7 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 		}
 		catch (Exception $e) 
 		{				
-			throw new Exception($this->exceptionMsg);die;		
+			throw new Exception(Thycart_Subscription_Adminhtml_IndexController::EXCEPTION_MSG);return;		
 		}
 	}
 }

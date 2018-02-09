@@ -10,9 +10,9 @@ if($this->subscrptionStatus($this->getProductid()))
 		$currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
 		$currency = Mage::app()->getLocale()->currency($currencyCode)->getSymbol(); 
 	?>
-	Subscrption:-
+	<label>Subscrption Every</label>
 	<select id="subscription_list">
-		<option value="">Select for subscription</option>
+		<option value="">Select Subscription</option>
 		<?php foreach($discountDetails as $detail) { ?>
 			<?php foreach($detail['available_units'] as $key=>$unit) { ?>
 			<option value="<?php echo $key ?>" data-unit="<?php echo $unit;?>" data-value="<?php echo $detail['discount_value'];?>" data-type="<?php echo $detail['discount_type'] ?>">
@@ -21,8 +21,8 @@ if($this->subscrptionStatus($this->getProductid()))
 			<?php } 
 		} ?>
 	</select>
+	<button type="button" title="Subscribe" id="btnSubscription" class="button btn-cart" >Subscribe & Checkout</button>
 	<div class="subscriptionInputDiv" id="subscriptionInputDiv"></div>
-	<button type="button" title="Subscribe" id="btnSubscription" class="button btn-cart" >Subscribe</button>
 </div>
 <?php 
 	} 
