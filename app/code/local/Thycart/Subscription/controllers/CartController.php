@@ -12,16 +12,20 @@ class Thycart_Subscription_CartController extends Mage_Checkout_CartController
 		$params = $this->getRequest()->getParams();
         Mage::getSingleton('core/session')->setSubscriptionParam($params);
         try {
-         if (isset($params['qty'])) {
+           if (isset($params['qty'])) {
             $filter = new Zend_Filter_LocalizedToNormalized(
-               array('locale' => Mage::app()->getLocale()->getLocaleCode())
-           );
+             array('locale' => Mage::app()->getLocale()->getLocaleCode())
+         );
             $params['qty'] = $filter->filter($params['qty']);
         }
 
         $product = $this->_initProduct();
         $related = $this->getRequest()->getParam('related_product');
 
+
+        $cart = Mage::getModel('checkout/cart');                
+        $cart->truncate(); // remove all active items in cart page
+        $cart->init();
             /**
              * Check product availability
              */
@@ -36,17 +40,7 @@ class Thycart_Subscription_CartController extends Mage_Checkout_CartController
             }
 
             $cart->save();
-            $cartHelper = Mage::helper('checkout/cart');
-            $items = $cartHelper->getCart()->getItems();     
-            foreach ($items as $item) 
-            {
-            	if($item->getProductId() == $product->getEntityId())
-            	{
-            		continue;
-            	}
-            	$itemId = $item->getItemId();
-            	$cartHelper->getCart()->removeItem($itemId)->save();
-            }
+           
 
             $this->_getSession()->setCartWasUpdated(true);
 

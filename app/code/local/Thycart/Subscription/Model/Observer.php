@@ -3,17 +3,33 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
 {
     public function setDiscount($observer)
     {
+        // echo Mage::app()->getRequest()->getActionName();die;
         $params =Mage::getSingleton('core/session')->getSubscriptionParam();
         if(empty($params))
         {
             return;
         }
+        if(Mage::app()->getRequest()->getActionName() == 'index' && $params['product'])
+        {
+            $item = $observer->getEvent()->getQuoteItem();
+            $cart = Mage::getSingleton('checkout/cart');
+            foreach ($cart->getQuote()->getItemsCollection() as $_item) 
+            {
+                $_item->isDeleted(true);
+            }  
+            $product = Mage::getModel('catalog/product');
+            $productToAdd = $product->load($params['product']);
+            $cart = Mage::getSingleton('checkout/session')->getQuote();
+            $cart->addProduct($productToAdd, $params['qty']);
+            $cart->save();
+        } 
+        
         $quote         =  $observer->getEvent()->getQuote();
         $quoteid       =  $quote->getId();
         $discountAmount=  $params['discount_value'];
         $disTotal = $quote->getItemsQty() * $discountAmount;
 
-        $productPrice = 123;
+        $productPrice = 0;
         if(isset($quote->getAllItems()[0]))
         {
             $productPrice = $quote->getAllItems()[0]->getPrice();
@@ -55,7 +71,6 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
                     $quote->setGrandTotal($quote->getBaseSubtotal()-$discountAmount)
                     ->setBaseGrandTotal($quote->getBaseSubtotal()-$discountAmount)
                     ->setSubtotalWithDiscount($quote->getBaseSubtotal()-$discountAmount)
-                    ->setBaseSubtotalWithDiscount(300)
                     ->save(); 
 
 
@@ -68,7 +83,7 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
                         if($address->getDiscountDescription())
                         {
                             $address->setDiscountAmount($quote->getItemsQty() * $disTotal);
-                            $address->setDiscountDescription($address->getDiscountDescription().', Custom Discount');
+                            $address->setDiscountDescription($address->getDiscountDescription().', Subscription Discount');
                             $address->setBaseDiscountAmount($quote->getItemsQty() * $disTotal);
                         }
                         else 
@@ -82,50 +97,50 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
                 }
                 foreach($quote->getAllItems() as $item)
                 {
-                   $item->setDiscountAmount($disTotal);
-                   $item->setBaseDiscountAmount($disTotal)->save();
-                }
-           }
-       }  
-    }
-    public function successfullySubscribed($observer)
+                 $item->setDiscountAmount($disTotal);
+                 $item->setBaseDiscountAmount($disTotal)->save();
+             }
+         }
+     }  
+ }
+ public function successfullySubscribed($observer)
+ {
+    $params =Mage::getSingleton('core/session')->getSubscriptionParam();
+    if(empty($params))
     {
-        $params =Mage::getSingleton('core/session')->getSubscriptionParam();
-        if(empty($params))
-        {
-            return;
-        }       
-        if(empty($observer))
-        {
-            return ;
-        }
-        $order      =   $observer->getOrderIds();
-        $orderId    =   array_values($order);
-        $unit       =   $params['unit'];
-        $date       =   Mage::getModel('core/date')->gmtDate('Y-m-d');
-        $customerId =   Mage::getSingleton('customer/session')->getId();
-        $productId  =   $params['product'];
-
-        $data       =   array(
-                                'start_date'    =>$date,
-                                'last_date'     =>$date,
-                                'unit_selected' =>$unit,
-                                'order_id'      =>$orderId[0],
-                                'product_id'    =>$productId,
-                                'customer_id'   =>$customerId,
-                                'number_of_orders_placed'=>1,
-                                'active'        =>1
-                            );
-        try
-        {
-            $model = Mage::getSingleton('subscription/subscriptioncustomer');
-            $model->addData($data)
-                  ->save();         
-        }
-        catch(Mage_Core_Exception $e)
-        {
-           Mage::throwExceptoin('unable to subscried');
-           return; 
-        }
+        return;
     }       
+    if(empty($observer))
+    {
+        return ;
+    }
+    $order      =   $observer->getOrderIds();
+    $orderId    =   array_values($order);
+    $unit       =   $params['unit'];
+    $date       =   Mage::getModel('core/date')->gmtDate('Y-m-d');
+    $customerId =   Mage::getSingleton('customer/session')->getId();
+    $productId  =   $params['product'];
+
+    $data       =   array(
+        'start_date'    =>$date,
+        'last_date'     =>$date,
+        'unit_selected' =>$unit,
+        'order_id'      =>$orderId[0],
+        'product_id'    =>$productId,
+        'customer_id'   =>$customerId,
+        'number_of_orders_placed'=>1,
+        'active'        =>1
+    );
+    try
+    {
+        $model = Mage::getSingleton('subscription/subscriptioncustomer');
+        $model->addData($data)
+        ->save();         
+    }
+    catch(Mage_Core_Exception $e)
+    {
+     Mage::throwExceptoin('unable to subscried');
+     return; 
+ }
+}       
 }
