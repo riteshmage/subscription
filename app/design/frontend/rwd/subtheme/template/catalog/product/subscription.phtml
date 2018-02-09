@@ -10,7 +10,7 @@ if($this->subscrptionStatus($this->getProductid()))
 		$currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
 		$currency = Mage::app()->getLocale()->currency($currencyCode)->getSymbol(); 
 	?>
-	<label>Subscrption Every</label>
+	<label>Subscrption </label>
 	<select id="subscription_list">
 		<option value="">Select Subscription</option>
 		<?php foreach($discountDetails as $detail) { ?>
@@ -22,6 +22,7 @@ if($this->subscrptionStatus($this->getProductid()))
 		} ?>
 	</select>
 	<button type="button" title="Subscribe" id="btnSubscription" class="button btn-cart" >Subscribe & Checkout</button>
+	<div class="center">OR</div>
 	<div class="subscriptionInputDiv" id="subscriptionInputDiv"></div>
 </div>
 <?php 
