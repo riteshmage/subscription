@@ -13,6 +13,12 @@ class Thycart_Subscription_Block_Adminhtml_Customer_Grid extends Mage_Adminhtml_
 	protected function _prepareCollection()
 	{
 		$collection = Mage::getResourceModel('subscription/subscriptioncustomer_collection');
+		foreach ($collection as $value)
+		{
+			$product_id 	= $value->getData()['product_id'];
+			$product_name	= Mage::getSingleton('catalog/product')->load($product_id)->getName();
+			$value->setData('product_name',$product_name);
+		}
 		$this->setCollection($collection);
 		return parent::_prepareCollection();
 	}
@@ -42,11 +48,11 @@ class Thycart_Subscription_Block_Adminhtml_Customer_Grid extends Mage_Adminhtml_
 			'width'     => '50px',
 			'index'     => 'order_id',
 		));
-		$this->addColumn('product_id',array(
-			'header'    => Mage::helper('subscription')->__('Product Id'),
+		$this->addColumn('product_name',array(
+			'header'    => Mage::helper('subscription')->__('Product Name'),
 			'align'     =>'center',
 			'width'     => '50px',
-			'index'     => 'product_id',
+			'index'     => 'product_name',
 		));
 		$this->addColumn('number_of_orders_placed',array(
 			'header'    => Mage::helper('subscription')->__('Orders Placed'),

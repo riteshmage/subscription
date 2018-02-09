@@ -197,7 +197,7 @@
             if(id === 'btnSubscription')
             {
                 url = this.form.action;
-                var replaceURL = url.replace("add/","myadd/");
+                var replaceURL = url.replace("/add/","/myadd/");
                 this.form.action = replaceURL;
                 if(this.validator) {
                     var nv = Validation.methods;
