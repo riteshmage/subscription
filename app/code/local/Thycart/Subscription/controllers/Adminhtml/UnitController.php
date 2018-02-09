@@ -119,8 +119,7 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 			$ids = $this->getRequest()->getPost('ids', array());
 
 			foreach ($ids as $id) {
-				$model = Mage::getModel('subscription/unit');
-				$model->setId($id)->delete();
+				$this->deleteAction($id);
 			}
 			Mage::getSingleton("adminhtml/session")->addSuccess(Mage::helper("adminhtml")->__('Unit were romeved'));
 		}
@@ -130,8 +129,12 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 		$this->_redirect('*/*/');
 	}
 
-	public function deleteAction()
+	public function deleteAction($id=0)
 	{
+		if($id > 0)
+		{
+			$this->getRequest()->setParam('id', $id);
+		}
 		if( $this->getRequest()->getParam('id') > 0 )
 		{
 			try {

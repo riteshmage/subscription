@@ -120,8 +120,7 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 				if($mappingExist)
 				{
 					Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Rule alredy exists'));
-					$this->_redirect('*/*/');
-					return;
+					$this->_redirect('*/*/');return;
 				}
 
 				$model->addData($postData);
@@ -146,11 +145,9 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 			Mage::getSingleton('adminhtml/session')->setSubscriptionData(false);
 			if ($this->getRequest()->getParam('back'))
 			{
-				$this->_redirect("*/*/edit", array("id" => $model->getId()));
-				return;
+				$this->_redirect("*/*/edit", array("id" => $model->getId()));return;
 			}
-			$this->_redirect("*/*/");
-			return;
+			$this->_redirect("*/*/");return;
 		}
 		catch (Exception $e)
 		{
@@ -158,8 +155,7 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 
 			Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 			Mage::getSingleton('adminhtml/session')->setSubscriptionData($this->getRequest()->getPost());
-			$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
-			return;
+			$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));return;
 		}
 		$this->_redirect('*/*/');
 	}
@@ -170,20 +166,24 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 			$ids = $this->getRequest()->getPost('ids', array());
 
 			foreach ($ids as $id) {
-				$model = Mage::getModel('subscription/master');
-				$model->setId($id)->delete();
+				$this->deleteAction($id);
 			}
-			Mage::getSingleton("adminhtml/session")->addSuccess(Mage::helper("adminhtml")->__('Rules were romeved'));
+			Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Rules were romeved'));
 		}
 		catch (Exception $e) {
-			Mage::getSingleton("adminhtml/session")->addError($e->getMessage());
+			Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 		}
 		$this->_redirect('*/*/');
 	}
 
-	public function deleteAction()
+	public function deleteAction($id=0)
 	{
-		if( $this->getRequest()->getParam('id') > 0 ) {
+		if($id > 0)
+		{
+			$this->getRequest()->setParam('id', $id);
+		}
+		if( $this->getRequest()->getParam('id') > 0 ) 
+		{
 			try 
 			{
 				$model = Mage::getModel('subscription/master');
@@ -196,7 +196,8 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Rule successfully deleted'));
 				$this->_redirect('*/*/');
 			} 
-			catch (Exception $e) {
+			catch (Exception $e) 
+			{
 				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 				$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
 			}
