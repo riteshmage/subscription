@@ -1,6 +1,7 @@
 <?php
 class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Controller_Action
 {
+	const UNIQUE_UNITMSG = 'Please provide unique Unit name.';
 	protected function _isAllowed()
 	{
 		return true;
@@ -88,11 +89,9 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 				{
 					if($e->getCode() === 23000)
 					{
-						throw new Exception("Please provide unique Unit name");
-						return;
+						throw new Exception(Thycart_Subscription_Adminhtml_UnitController::UNIQUE_UNITMSG);return;
 					}
-					throw new Exception("Error processing request");
-					return;
+					throw new Exception(EXCEPTION_MSG);return;
 				}
 
 				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Unit successfully saved'));
@@ -102,15 +101,13 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 					$this->_redirect("*/*/edit", array("id" => $model->getId()));
 					return;
 				}
-				$this->_redirect("*/*/");
-				return;
+				$this->_redirect("*/*/");return;
 			}
 			catch (Exception $e)
 			{
 				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 				Mage::getSingleton('adminhtml/session')->setUnitData($this->getRequest()->getPost());
-				$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
-				return;
+				$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));return;
 			}
 		}
 		$this->_redirect('*/*/');
@@ -177,7 +174,7 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 		}
 		catch (Exception $e) 
 		{				
-			throw new Exception(Thycart_Subscription_Adminhtml_IndexController::EXCEPTION_MSG);return;		
+			throw new Exception(EXCEPTION_MSG);return;		
 		}
 	}
 }
