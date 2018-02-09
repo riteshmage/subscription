@@ -1,5 +1,5 @@
 <?php 
-require_once 'Mage/Checkout/controllers/CartController.php';
+require_once Mage::getModuleDir('controllers', 'Mage_Checkout').DS.'CartController.php';
 class Thycart_Subscription_CartController extends Mage_Checkout_CartController
 {
 	public function myaddAction()
