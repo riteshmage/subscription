@@ -114,18 +114,20 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
         {
             return ;
         }
-        $order      =   $observer->getOrderIds();
-        $orderId    =   array_values($order);
-        $unit       =   $params['unit'];
-        $date       =   Mage::getModel('core/date')->gmtDate('Y-m-d');
-        $customerId =   Mage::getSingleton('customer/session')->getId();
-        $productId  =   $params['product'];
+        $orderId     =   $observer->getData('order_ids');
+        $order       =   Mage::getSingleton('sales/order')->load($orderId);
+        $Incrementid =   $order->getIncrementId();
+        $unit        =   $params['unit'];
+        $date        =   Mage::getModel('core/date')->gmtDate('Y-m-d');
+        $customerId  =   Mage::getSingleton('customer/session')->getId();
+        $productId   =   $params['product'];
 
+        
         $data       =   array(
             'start_date'    =>$date,
             'last_date'     =>$date,
             'unit_selected' =>$unit,
-            'order_id'      =>$orderId[0],
+            'order_id'      =>$Incrementid,
             'product_id'    =>$productId,
             'customer_id'   =>$customerId,
             'number_of_orders_placed'=>1,
