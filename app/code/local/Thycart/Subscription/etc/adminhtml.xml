@@ -27,4 +27,46 @@
 			</children>
 		</customer>
 	</menu>
+	<acl>
+		<resources>
+<!-- 			<all>
+				<title>Allow Everything</title>
+			</all>  dont know why it is used for so commented--> 
+			<admin>
+				<children>
+					<promo>
+						<sort_order>0</sort_order>
+						<children>
+							<subscription>
+								<title>Subscription Manager</title>
+								<sort_order>0</sort_order>
+							</subscription>
+						</children>
+					</promo>
+				</children>
+				<children>
+					<customer>
+						<sort_order>1</sort_order>
+						<children>
+							<customer>
+								<title>Subscribed Customers</title>
+								<sort_order>0</sort_order>
+							</customer>
+						</children>
+					</customer>
+				</children>
+				<children>
+					<promo>
+						<sort_order>0</sort_order>
+						<children>
+							<unit>
+								<title>Unit Master</title>
+								<sort_order>1</sort_order>
+							</unit>
+						</children>
+					</promo>
+				</children>
+			</admin>
+		</resources>
+	</acl>
 </config>
