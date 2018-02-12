@@ -1,15 +1,15 @@
 <?php 
 if($this->subscrptionStatus($this->getProductid()))
 { ?>
-<div id="div_subscription">
 <?php 
 	$discountDetails = $this->discountDetail();
-	if(!empty($discountDetails))
+	if(!empty($discountDetails) && $discountDetails['show_subscription'] > 0)
 	{
 		$disText = Thycart_Subscription_Block_Subscription::DISCOUNT_CONFIG;
 		$currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
 		$currency = Mage::app()->getLocale()->currency($currencyCode)->getSymbol(); 
 	?>
+<div id="div_subscription">
 	<label>Subscrption </label>
 	<select id="subscription_list">
 		<option value="">Select Subscription</option>

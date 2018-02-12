@@ -11,6 +11,7 @@ class Thycart_Subscription_Block_Subscription extends Mage_Core_Block_Template
 		$unitArray = array();
 		$units = array();
 		$finalData = array();
+		$showSubscription = 0;
 
 		$subscriptionDetails = $this->subscrptionData;
 
@@ -41,7 +42,7 @@ class Thycart_Subscription_Block_Subscription extends Mage_Core_Block_Template
 		}
 		
 		$unitArray = array_column($unitModel, 'subscription_unit','unit_id');
-
+		
 		unset($unitModel);
 		
 		foreach ($finalData as $finalKey => $tempValue)
@@ -51,17 +52,23 @@ class Thycart_Subscription_Block_Subscription extends Mage_Core_Block_Template
 				$unitKeyArray = explode(',', $finalKey);
 				foreach ($unitKeyArray as $unitKey => $unit) {
 					if(isset($unitArray[$unit]))
-					$finalData[$finalKey]['available_units'][$unit] = $unitArray[$unit]; 
+					{
+						$finalData[$finalKey]['available_units'][$unit] = $unitArray[$unit]; 
+						$showSubscription = 1;
+					}
 				}
 			}
 			else
 			{
-				if(isset($unitArray[$unit]))
+				if(!empty($unitArray))
 				{
 					$finalData[$finalKey]['available_units'][$finalKey] = $unitArray[$finalKey];
+					$showSubscription = 1;
 				}
 			}
 		}
+		$finalData['show_subscription'] = $showSubscription;
+
 		return $finalData;
 	}
 
