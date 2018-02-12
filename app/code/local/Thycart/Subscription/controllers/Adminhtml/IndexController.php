@@ -71,7 +71,7 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 		$postData = $this->validateFilterData($postData);
 
 		$connection = Mage::getSingleton('core/resource')
-			->getConnection('core_write');
+		->getConnection('core_write');
 
 		try 
 		{
@@ -112,6 +112,18 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 			$postData['product_id']  = $product_ids;
 			$postData['product_sku'] = $sku;
 			$postData['unit']        = $unit;
+			$user = Mage::getSingleton('admin/session');
+			if(empty($id))
+			{
+				$userId = $user->getUser()->getUserId();
+				$postData['created_by']	 =$userId;
+				$postData['updated_by']	 =$userId;
+			}
+			else
+			{
+				$userId = $user->getUser()->getUserId();
+				$postData['updated_by']	 =$userId;
+			}
 			
 			$mappingExist =$this->mappingExist($productIdArray, $unitArr);
 
