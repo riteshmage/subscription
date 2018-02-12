@@ -47,8 +47,8 @@ $installer->run("DROP TABLE IF EXISTS `unit_product_mapping`;
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1
 ");
 
-$installer->run("DROP TABLE IF EXISTS `subcription_customer`;
-	CREATE TABLE `subcription_customer` (
+$installer->run("DROP TABLE IF EXISTS `subscription_customer`;
+	CREATE TABLE `subscription_customer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `start_date` date NOT NULL,
   `last_date` date NOT NULL,
