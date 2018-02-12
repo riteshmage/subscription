@@ -14,11 +14,13 @@ if($this->subscrptionStatus($this->getProductid()))
 	<select id="subscription_list">
 		<option value="">Select Subscription</option>
 		<?php foreach($discountDetails as $detail) { ?>
-			<?php foreach($detail['available_units'] as $key=>$unit) { ?>
+			<?php if(isset($detail['available_units'])) {	
+				foreach($detail['available_units'] as $key=>$unit) { ?>
 			<option value="<?php echo $key ?>" data-unit="<?php echo $unit;?>" data-value="<?php echo $detail['discount_value'];?>" data-type="<?php echo $detail['discount_type'] ?>">
 				<?php echo $unit.' - '.$currency.$detail['discount_value'].$disText[$detail['discount_type']]; ?>
 			</option>
 			<?php } 
+			} 
 		} ?>
 	</select>
 	<button type="button" title="Subscribe" id="btnSubscription" class="button btn-cart" >Subscribe & Checkout</button>
@@ -35,7 +37,7 @@ if($this->subscrptionStatus($this->getProductid()))
 	{
 		jQuery('.subscriptionInputs').remove();
 		var subscriptionDetails = jQuery('#subscription_list').val();
-		console.log(subscriptionDetails);
+
 		if(subscriptionDetails != '')
 		{
 			jQuery('#product_addtocart_form #subscriptionInputDiv').append(jQuery('<input>').attr({ 
@@ -67,7 +69,7 @@ if($this->subscrptionStatus($this->getProductid()))
 		var subscriptionDetails = jQuery('#subscription_list').val();
     	if(subscriptionDetails == '')
     	{
-    		alert('please select subscription');
+    		alert('Please select subscription');
     		return false;	
     	}
    		productAddToCartForm.submit(this,'btnSubscription');
