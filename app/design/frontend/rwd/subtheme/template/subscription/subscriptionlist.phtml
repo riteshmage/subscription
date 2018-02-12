@@ -37,7 +37,11 @@ if(empty($lists)) { ?>
             <td class="unit"><?php echo $list['unit_selected']; ?></td>
             <td class="status"><em><?php echo $statusArr[$list['active']]; ?></em></td>
             <td class="status">
-                <a href="<?php echo $this->getUrl('subscription/index/cancel', array('increment_id' => $list['order_id'], '_secure'=>true)) ?>" class="link-reorder"><?php echo $this->__('Cancel Order') ?></a>                     
+                <?php 
+                    $link = ($list['active'] > 0) ? $this->getUrl('subscription/index/cancel', array('order_number' => $list['order_id'], 'subscription_id' => $list['id'], '_secure'=>true)) : 0;
+                    $text = ($link) ? $this->__('Unsubscribe') : '-';
+                ?>
+                <a href="<?php echo $link; ?>"><?php echo $text; ?></a>                    
             </td>
         </tr>
         <?php $i++; endforeach; ?>
