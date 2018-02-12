@@ -82,7 +82,7 @@
 						<table>unit_master</table>
 					</unit>
 					<subscriptioncustomer>
-						<table>subcription_customer</table>
+						<table>subscription_customer</table>
 					</subscriptioncustomer>
 					<unitproductmapping>
 						<table>unit_product_mapping</table>
