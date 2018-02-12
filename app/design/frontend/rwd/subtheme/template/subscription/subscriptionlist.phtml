@@ -37,7 +37,7 @@ if(empty($lists)) { ?>
             <td class="unit"><?php echo $list['unit_selected']; ?></td>
             <td class="status"><em><?php echo $statusArr[$list['active']]; ?></em></td>
             <td class="status">
-                <?php echo ($list['active'])?'Cancel':'-'; ?>                    
+                <a href="<?php echo $this->getUrl('subscription/index/cancel', array('increment_id' => $list['order_id'], '_secure'=>true)) ?>" class="link-reorder"><?php echo $this->__('Cancel Order') ?></a>                     
             </td>
         </tr>
         <?php $i++; endforeach; ?>
