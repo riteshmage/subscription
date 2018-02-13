@@ -10,12 +10,14 @@ class Thycart_Subscription_Block_Adminhtml_Unit_Grid extends Mage_Adminhtml_Bloc
 		$this->setUseAjax(false);
 		$this->setSaveParametersInSession(true);
 	}
+	
 	protected function _prepareCollection()
 	{
 		$collection = Mage::getResourceModel('subscription/unit_collection');
 		$this->setCollection($collection);
 		return parent::_prepareCollection();
 	}
+
 	protected function _prepareColumns()
 	{
 		$this->addColumn('unit_id',array(
@@ -48,22 +50,9 @@ class Thycart_Subscription_Block_Adminhtml_Unit_Grid extends Mage_Adminhtml_Bloc
 			)
 		));
 	}
+
 	public function getRowUrl($row)
 	{
 		return $this->getUrl("*/*/edit", array("id" => $row->getId()));
-	}
-
-	protected function _prepareMassaction()
-	{	
-		$this->setMassactionIdField('unit_id');
-		$this->getMassactionBlock()->setFormFieldName('ids');
-		$this->getMassactionBlock()->setUseSelectAll(true);
-		$this->getMassactionBlock()->addItem('remove_rule', array(
-			'label'=> Mage::helper('subscription')->__('Remove Unit'),
-			'url'  => $this->getUrl('*/adminhtml_unit/massRemove'),
-			'confirm' => Mage::helper('subscription')->__('Are you sure?')
-		));
-
-		return $this;
 	}
 }
