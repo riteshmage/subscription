@@ -24,12 +24,12 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Edit extends Mage_Adminh
 	public function getHeaderText()
 	{
 		if(Mage::registry('subscription_data') && Mage::registry('subscription_data')->getId())
-			{
-				return Mage::helper('subscription')->__("Edit Rule %s", $this->htmlEscape(Mage::registry('subscription_data')->getId()));
-			} 
-			else
-			{
-				return Mage::helper('subscription')->__('Add rule');
-			}
-		} 	
-	}
+		{
+			return Mage::helper('subscription')->__("Edit Rule %s", $this->htmlEscape(Mage::registry('subscription_data')->getId()));
+		} 
+		else
+		{
+			return Mage::helper('subscription')->__('Add rule');
+		}
+	} 	
+}
