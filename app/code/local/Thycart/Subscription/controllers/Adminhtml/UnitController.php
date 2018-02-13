@@ -65,7 +65,7 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 	}
 	public function saveAction()
 	{
-		if ( $this->getRequest()->getPost())
+		if ($this->getRequest()->getPost())
 		{
 			try {
 				$postData = $this->getRequest()->getPost();

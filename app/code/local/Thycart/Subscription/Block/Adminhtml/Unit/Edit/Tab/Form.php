@@ -14,6 +14,14 @@ class Thycart_Subscription_Block_Adminhtml_Unit_Edit_Tab_Form extends Mage_Admin
 			'class' 	=> 'validate-code validate-no-html-tags required-entry',
 			'after_element_html' => '<small>Add Name</small>'
 		));
+
+		$fieldset->addField('number_of_days', 'text', array(
+			'label'     => 	Mage::helper('subscription')->__('Number Of Days '),
+			'name'      => 	'number_of_days',
+			'class'		=> 	'validate-digits validate-greater-than-zero validate-no-html-tags',
+			'after_element_html' => '<small>Please insert number of days in this Unit</small>'
+		));	
+
 		$fieldset->addField('active', 'select', array(
 			'label'     => Mage::helper('subscription')->__('Active'),
 			'name'      => 'active',
