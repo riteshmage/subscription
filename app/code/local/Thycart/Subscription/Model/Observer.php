@@ -3,7 +3,6 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
 {
     public function setDiscount($observer)
     {
-        // echo Mage::app()->getRequest()->getActionName();die;
         $params =Mage::getSingleton('core/session')->getSubscriptionParam();
         if(empty($params))
         {
@@ -25,7 +24,6 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
         } 
         
         $quote         =  $observer->getEvent()->getQuote();
-        $quoteid       =  $quote->getId();
         $discountAmount=  $params['discount_value'];
         $disTotal = $quote->getItemsQty() * $discountAmount;
 
@@ -40,68 +38,8 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
             $disTotal = ($quote->getItemsQty() * $productPrice) * ($discountAmount/100);
             $discountAmount = $disTotal;
         }
-        if($quoteid) 
-        {
-            if($discountAmount>0) 
-            {
 
-                $total=$quote->getBaseSubtotal();
-                $quote->setSubtotal(0);
-                $quote->setBaseSubtotal(0);
-                $quote->setSubtotalWithDiscount(0);
-                $quote->setBaseSubtotalWithDiscount(0);
-                $quote->setGrandTotal(0);
-                $quote->setBaseGrandTotal(0);
-                $canAddItems = $quote->isVirtual()? ('billing') : ('shipping'); 
-
-                foreach ($quote->getAllAddresses() as $address) 
-                {
-                    $address->setSubtotal(0);
-                    $address->setBaseSubtotal(0);
-                    $address->setGrandTotal(0);
-                    $address->setBaseGrandTotal(0);
-                    $address->collectTotals();
-                    $quote->setSubtotal((float) $quote->getSubtotal() + $address->getSubtotal());
-                    $quote->setBaseSubtotal((float) $quote->getBaseSubtotal() + $address->getBaseSubtotal());
-                    $quote->setSubtotalWithDiscount((float) $quote->getSubtotalWithDiscount() + $address->getSubtotalWithDiscount());
-                    $quote->setBaseSubtotalWithDiscount((float) $quote->getBaseSubtotalWithDiscount() + $address->getBaseSubtotalWithDiscount());
-                    $quote->setGrandTotal((float) $quote->getGrandTotal() + $address->getGrandTotal());
-                    $quote->setBaseGrandTotal((float) $quote->getBaseGrandTotal() + $address->getBaseGrandTotal());
-                    $quote ->save();
-                    $quote->setGrandTotal($quote->getBaseSubtotal()-$discountAmount)
-                    ->setBaseGrandTotal($quote->getBaseSubtotal()-$discountAmount)
-                    ->setSubtotalWithDiscount($quote->getBaseSubtotal()-$discountAmount)
-                    ->save(); 
-
-
-                    if($address->getAddressType()==$canAddItems) 
-                    {
-                        $address->setSubtotalWithDiscount((float)$address->getSubtotalWithDiscount()-$disTotal);
-                        $address->setGrandTotal((float) $address->getGrandTotal()-$disTotal);
-                        $address->setBaseSubtotalWithDiscount((float)$address->getBaseSubtotalWithDiscount()-$disTotal);
-                        $address->setBaseGrandTotal((float)$address->getBaseGrandTotal()-$disTotal);
-                        if($address->getDiscountDescription())
-                        {
-                            $address->setDiscountAmount($quote->getItemsQty() * $disTotal);
-                            $address->setDiscountDescription($address->getDiscountDescription().', Subscription Discount');
-                            $address->setBaseDiscountAmount($quote->getItemsQty() * $disTotal);
-                        }
-                        else 
-                        {
-                            $address->setDiscountAmount($disTotal);
-                            $address->setDiscountDescription('Subscription Discounts');
-                            $address->setBaseDiscountAmount();
-                        }
-                        $address->save();
-                    }
-                }
-                foreach($quote->getAllItems() as $item)
-                {
-                    $item->setDiscountAmount($disTotal);
-                    $item->setBaseDiscountAmount($disTotal)->save();
-                }
-            }
-        }  
+        Mage::getModel('subscription/discount')->setDiscount($quote, $discountAmount, $disTotal);
     }
     public function successfullySubscribed($observer)
     {
@@ -124,15 +62,17 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
 
         
         $data       =   array(
-            'start_date'    =>$date,
-            'last_date'     =>$date,
-            'unit_selected' =>$unit,
-            'order_id'      =>$Incrementid,
-            'product_id'    =>$productId,
-            'customer_id'   =>$customerId,
-            'number_of_orders_placed'=>1,
-            'active'        =>1
-        );
+                                'start_date'    =>  $date,
+                                'last_date'     =>  $date,
+                                'unit_selected' =>  $unit,
+                                'order_id'      =>  $Incrementid,
+                                'product_id'    =>  $productId,
+                                'customer_id'   =>  $customerId,
+                                'number_of_orders_placed'=>1,
+                                'discount_type' =>  $params['discount_type'],
+                                'discount_value'=>  $params['discount_value'],
+                                'active'        =>  1
+                              );
         try
         {
             $model = Mage::getSingleton('subscription/subscriptioncustomer');
