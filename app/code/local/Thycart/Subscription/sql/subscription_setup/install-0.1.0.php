@@ -55,13 +55,15 @@ $installer->run("DROP TABLE IF EXISTS `subscription_customer`;
   `unit_selected` varchar(255) NOT NULL,
   `order_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
+  `discount_type` tinyint(4) NOT NULL,
+  `discount_value` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `number_of_orders_placed` int(11) NOT NULL,
   `active` tinyint(4) NOT NULL,
   `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1
 ");
 
 $installer->endSetup();
