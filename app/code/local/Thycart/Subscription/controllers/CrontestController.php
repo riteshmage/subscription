@@ -24,7 +24,7 @@ class Thycart_Subscription_CrontestController extends Mage_Core_Controller_Front
 					if($customer['unit_selected'] === $unit)
 					{
 						$lastDate  = date_create($customer['last_date']);
-						$todayDate = date_create(date('Y/m/d'));
+						$todayDate = date_create(Mage::getModel('core/date')->gmtDate('Y-m-d'));
 						$diff 	   = date_diff($lastDate,$todayDate);
 						if ($diff->format("%a") == $days)
 						{
