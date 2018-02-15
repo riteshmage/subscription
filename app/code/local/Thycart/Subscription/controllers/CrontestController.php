@@ -65,6 +65,10 @@ class Thycart_Subscription_CrontestController extends Mage_Core_Controller_Front
 						        $reOrderIncId  = $newOrder->getIncrementId();
 						        $customerId    = $newOrder->getCustomerId();
 						        $customerEmail = $newOrder->getCustomerEmail();
+						        $update = Mage::getModel('subscription/subscriptioncustomer')->load($customer['id']);
+						        $update->setLastDate(Mage::getModel('core/date')->date('Y-m-d'));
+						        $update->setNumberOfOrdersPlaced($customer['number_of_orders_placed']+1);
+						        $update->save();
 						        Mage::log(" Subscription Order Successfully palced for Customer with ID =$customerId  and  email = $customerEmail, order number is $reOrderIncId",null,"subscriptionorder.log");
 						    }
 						    catch (Exception $e)
