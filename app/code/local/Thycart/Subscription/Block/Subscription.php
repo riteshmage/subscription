@@ -33,6 +33,7 @@ class Thycart_Subscription_Block_Subscription extends Mage_Core_Block_Template
 			$unitModel = Mage::getSingleton('subscription/unit')
 			->getCollection()
 			->addFieldToFilter('unit_id', array('in' => $units))
+			->addFieldToFilter('active', 1)
 			->addFieldToSelect(array('unit_id','subscription_unit'))
 			->getData();
 		}
@@ -62,13 +63,18 @@ class Thycart_Subscription_Block_Subscription extends Mage_Core_Block_Template
 			{
 				if(!empty($unitArray))
 				{
-					$finalData[$finalKey]['available_units'][$finalKey] = $unitArray[$finalKey];
-					$showSubscription = 1;
+					foreach ($unitArray as $key => $value) 
+					{
+						if($finalKey == $key)
+						{
+							$finalData[$finalKey]['available_units'][$finalKey] = $unitArray[$finalKey];
+							$showSubscription = 1;
+						}
+					}
 				}
 			}
 		}
 		$finalData['show_subscription'] = $showSubscription;
-
 		return $finalData;
 	}
 
