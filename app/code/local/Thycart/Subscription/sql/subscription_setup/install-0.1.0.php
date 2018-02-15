@@ -25,13 +25,14 @@ $installer->run("DROP TABLE IF EXISTS `subscription_master`;
 
 $installer->run("DROP TABLE IF EXISTS `unit_master`;
 	CREATE TABLE `unit_master` (
-  `unit_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `subscription_unit` varchar(200) NOT NULL,
-  `active` tinyint(4) unsigned NOT NULL DEFAULT '0',
-  `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`unit_id`),
-  UNIQUE KEY `subscription_unit` (`subscription_unit`)
+ `unit_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+ `subscription_unit` varchar(200) NOT NULL,
+ `number_of_days` int(11) NOT NULL,
+ `active` tinyint(4) unsigned NOT NULL DEFAULT '0',
+ `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (`unit_id`),
+ UNIQUE KEY `subscription_unit` (`subscription_unit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1
 ");
 
