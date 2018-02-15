@@ -131,5 +131,14 @@
 			</checkout_onepage_controller_success_action>
 		</events>
 	</global>
-
+	<crontab>
+		<jobs>
+			<subscription>
+				<schedule>
+					<cron_expr>0 0 * * *</cron_expr>
+				</schedule>
+				<run><model>subscription/observer::cron</model></run>
+			</subscription>
+		</jobs>
+	</crontab>
 </config>
