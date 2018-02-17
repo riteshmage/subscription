@@ -1,5 +1,5 @@
 var selectorVisible=false;
-
+var _self = this;
 getProductChooser = function (url) {
 
     if(selectorVisible){
@@ -16,20 +16,23 @@ getProductChooser = function (url) {
                 var a = $("product_chooser");
                 a.update(b.responseText);
                 a.scrollTo();
-                
-                if(jQuery("#product_sku").val())
-                {
-                    var skus = jQuery("#product_sku").val().split(',');
-                    setTimeout(function()
-                    { 
-                        jQuery.each(skus,function(i,val)
-                        {
-                            jQuery('input:checkbox[value="'+val+'"]').prop("checked",true);
-                        })
-                    }, 500);
-                }
+                _self.dumpVal();
             }
         });         
+};
+
+function dumpVal () {
+    if(jQuery("#product_sku").val())
+    {
+        var skus = jQuery("#product_sku").val().split(',');
+        setTimeout(function()
+        { 
+            jQuery.each(skus,function(i,val)
+            {
+                jQuery('input:checkbox[value="'+val+'"]').prop("checked",true);
+            })
+        }, 500);
+    }
 };
 
 jQuery(document).ready(function(){
@@ -60,9 +63,9 @@ VarienRulesForm.prototype = {
                 Event.observe(c, "click", this.hideParamInputField.bind(this, b))
             } else {
                 f = f.down();
-                if (!f.multiple) {
+                /*if (!f.multiple) {
                     Event.observe(f, "change", this.hideParamInputField.bind(this, b))
-                }
+                }*/
                 Event.observe(f, "blur", this.hideParamInputField.bind(this, b))
             }
         }
@@ -73,7 +76,8 @@ VarienRulesForm.prototype = {
     },
     showChooserElement: function (c) {
         this.chooserSelectedItems = $H({});
-        var a = this.updateElement.value.split(","),
+        var a = this.updateElement.value.split(",");
+        console.log(a);
         b = "";
         for (i = 0; i < a.length; i++) {
             b = a[i].strip();
@@ -92,7 +96,7 @@ VarienRulesForm.prototype = {
         })
     },
     showChooserLoaded: function (a, b) {
-        a.style.display = "block"
+        a.style.display = "block";
     },
     showChooser: function (a, c) {
         var b = a.up("li");
@@ -257,6 +261,7 @@ VarienRulesForm.prototype = {
                 "selected[]": this.chooserSelectedItems.keys()
             }
         }
+        _self.dumpVal();
     },
     chooserGridRowClick: function (b, d) {
         var f = Event.findElement(d, "tr");
