@@ -18,7 +18,7 @@ class Thycart_Subscription_Block_Adminhtml_Unit_Edit_Tab_Form extends Mage_Admin
 		$fieldset->addField('number_of_days', 'text', array(
 			'label'     => 	Mage::helper('subscription')->__('Number Of Days '),
 			'name'      => 	'number_of_days',
-			'class'		=> 	'validate-digits validate-greater-than-zero validate-no-html-tags',
+			'class'		=> 	'validate-digits validate-greater-than-zero validate-digits-range digits-range-1-366 validate-no-html-tags',
 			'after_element_html' => '<small>Please insert number of days in this Unit</small>'
 		));	
 
