@@ -69,6 +69,11 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 		{
 			try {
 				$postData = $this->getRequest()->getPost();
+				$postData = $this->validateData($postData);
+				if (!$postData)
+				{
+					return;
+				}
 				$model = Mage::getModel('subscription/unit');
 				if(!empty($this->getRequest()->getParam('id')))
 				{	
@@ -111,6 +116,37 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 			}
 		}
 		$this->_redirect('*/*/');
+	}
+
+	public function validateData($postData)
+	{
+		if ( empty($this->getRequest()->getParam('subscription_unit')) || empty($this->getRequest()->getParam('number_of_days')) || empty($this->getRequest()->getParam('active')) )
+		{
+			$this->error();
+			return false;
+		}
+		if(!empty($postData))
+		{
+			$unit     = Mage::helper('subscription')->isAlphanum($postData['subscription_unit']);
+			$days     = Mage::helper('subscription')->isNumber($postData['number_of_days']);
+			$numDays  = Mage::helper('subscription')->numericRange($postData['number_of_days'], 1 ,366);
+			if(!$days || !$unit || !$numDays)
+			{
+				$this->error();
+				return false;
+			}
+			return Mage::helper('subscription')->validateData($postData);
+		}	
+	}
+
+	public function error()
+	{
+		Mage::getSingleton('adminhtml/session')->addError('Please enter required fields and valid Data');
+		if ($this->getRequest()->getParam('back'))
+		{
+			$this->_redirect("*/*/edit", array("id" => ($this->getRequest()->getParam('id'))));
+		}
+		$this->_redirect("*/*/");
 	}
 
 	public function massRemoveAction()

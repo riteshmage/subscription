@@ -69,7 +69,10 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 	{
 		$postData = $this->getRequest()->getPost();
 		$postData = $this->validateFilterData($postData);
-
+		if (!$postData)
+		{
+			return;
+		}
 		$connection = Mage::getSingleton('core/resource')
 		->getConnection('core_write');
 
@@ -219,16 +222,10 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 
 	public function validateFilterData($postData)
 	{
-		if ( empty($this->getRequest()->getParam('subscription_name')) || empty($this->getRequest()->getParam('discount_type')) || empty($this->getRequest()->getParam('unit')) || empty($this->getRequest()->getParam('product_sku')))
+		if (empty($this->getRequest()->getParam('subscription_name')) || empty($this->getRequest()->getParam('max_billing_cycle')) || empty($this->getRequest()->getParam('discount_type')) || empty($this->getRequest()->getParam('discount_value')) || empty($this->getRequest()->getParam('unit')) || empty($this->getRequest()->getParam('active')) || empty($this->getRequest()->getParam('product_sku')))
 		{
-			Mage::getSingleton('adminhtml/session')->addError('Please enter required fields');
-			if ($this->getRequest()->getParam('back'))
-			{
-				$this->_redirect("*/*/edit", array("id" => empty($this->getRequest()->getParam('id'))));
-				return;
-			}
-			$this->_redirect("*/*/");
-			return;
+			$this->error();
+			return false;
 		}
 		if(!empty($postData))
 		{
@@ -239,7 +236,19 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 				$postData['chooser_sku'],$postData['entity_id'],
 				$postData['chooser_name'],$postData['is_active']
 			);
-			return $postData;
+			$billingCycle  = Mage::helper('subscription')->isNumber($postData['max_billing_cycle']);
+			$discountValue = Mage::helper('subscription')->isNumber($postData['discount_value']);
+			$subsName 	   = Mage::helper('subscription')->isAlphanum($postData['subscription_name']);
+			if($postData['discount_type'] == 2)
+			{
+				$discountAmount  = Mage::helper('subscription')->numericRange($postData['discount_value'], 0 ,100);
+			}
+			if(!$billingCycle  || !$discountValue || !$subsName || !$discountAmount)
+			{
+				$this->error();
+				return false;
+			}
+			return Mage::helper('subscription')->validateData($postData);
 		}
 	}
 
@@ -332,5 +341,14 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 		{				
 			throw new Exception(EXCEPTION_MSG);return;		
 		}
+	}
+	public function error()
+	{
+		Mage::getSingleton('adminhtml/session')->addError('Please enter required fields and enter valid data ');
+		if ($this->getRequest()->getParam('back'))
+		{
+			$this->_redirect("*/*/edit", array("id" => ($this->getRequest()->getParam('id'))));
+		}
+		$this->_redirect("*/*/");
 	}
 }
