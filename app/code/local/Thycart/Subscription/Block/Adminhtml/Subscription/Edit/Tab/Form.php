@@ -13,7 +13,7 @@ class Thycart_Subscription_Block_Adminhtml_Subscription_Edit_Tab_Form extends Ma
 			'name'      => 'subscription_name',
 			'required'  => true,
 			'class' 	=> 'validate-no-html-tags required-entry',
-			'after_element_html' => '<small>Example Product Name_[weekly/monthly/yearly]</small>'
+			'after_element_html' => '<small>Dont use special characters</small>'
 		));
 		$fieldset->addField('max_billing_cycle', 'text', array(
 			'label'     => Mage::helper('subscription')->__('Max billing cycles allowed'),
