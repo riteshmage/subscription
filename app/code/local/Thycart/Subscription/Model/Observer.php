@@ -14,7 +14,16 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
                                          ->getCollection()
                                          ->addFieldToSelect(array('subscription_unit','number_of_days'))
                                          ->getData();
-
+            if(empty($subscribedCustomers) )
+            {
+                Mage::log("Unable to fetch data from customer table : {$e->getMessage()}",null,"subscriptionorder.log");
+                return;
+            }
+            if(empty($units))
+            {
+                Mage::log("Unable to fetch data from Unit table : {$e->getMessage()}",null,"subscriptionorder.log");
+                return; 
+            }
             $unitDays = array_column($units, 'number_of_days','subscription_unit');
 
             foreach ($subscribedCustomers as $customer)
@@ -97,26 +106,48 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
         {
             return;
         }
+
+        if(!Mage::helper('subscription')->isAlphanum($params['unit']) || !Mage::helper('subscription')->isDigit($params['discount_type']) || !Mage::helper('subscription')->isNumber($params['discount_value']))
+        {
+            return;
+        }
+
+        if($params['discount_type'] == 2)
+        {
+            if(!Mage::helper('subscription')->isDigit($params['discount_value']) ||  !Mage::helper('subscription')->numericRange($params['discount_value'], 0 ,100))
+            {
+                return;
+            }
+        }
+
         if(Mage::app()->getRequest()->getActionName() == 'index' && $params['product'])
         {
             $item = $observer->getEvent()->getQuoteItem();
-            $cartitem = Mage::getSingleton('checkout/cart');
-            foreach ($cartitem->getQuote()->getItemsCollection() as $_item) 
+            try
             {
-                $_item->isDeleted(true);
-            }  
-            $product = Mage::getModel('catalog/product');
-            $productToAdd = $product->load($params['product']);
-            $cart = Mage::getSingleton('checkout/session')->getQuote();
-            $cart->addProduct($productToAdd, $params['qty']);
-            $cart->save();
+                $cartitem = Mage::getSingleton('checkout/cart');
+                foreach ($cartitem->getQuote()->getItemsCollection() as $_item) 
+                {
+                    $_item->isDeleted(true);
+                }  
+                $product = Mage::getModel('catalog/product');
+                $productToAdd = $product->load($params['product']);
+                $cart = Mage::getSingleton('checkout/session')->getQuote();
+                $cart->addProduct($productToAdd, $params['qty']);
+                $cart->save();
+            }
+            catch (Mage_Core_Exception $e)
+            {
+                echo $e;
+                return;  
+            }
         } 
         
         $quote         =  $observer->getEvent()->getQuote();
         $discountAmount=  $params['discount_value'];
         $disTotal = $quote->getItemsQty() * $discountAmount;
-
         $productPrice = 0;
+
         if(isset($quote->getAllItems()[0]))
         {
             $productPrice = $quote->getAllItems()[0]->getPrice();
@@ -128,8 +159,18 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
             $discountAmount = $disTotal;
         }
 
-        Mage::getModel('subscription/discount')->setDiscount($quote, $discountAmount, $disTotal);
+        try
+        {
+            Mage::getModel('subscription/discount')->setDiscount($quote, $discountAmount, $disTotal);
+        }
+
+        catch (Mage_Core_Exception $e)
+        {
+            echo $e;
+            return;  
+        }
     }
+
     public function successfullySubscribed($observer)
     {
         $params =Mage::getSingleton('core/session')->getSubscriptionParam();
@@ -141,21 +182,38 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
         {
             return ;
         }
-        $orderId     =   $observer->getData('order_ids');
-        $order       =   Mage::getSingleton('sales/order')->load($orderId);
-        $Incrementid =   $order->getIncrementId();
-        $unit        =   $params['unit'];
-        $date        =   Mage::getModel('core/date')->gmtDate('Y-m-d');
-        $customerId  =   Mage::getSingleton('customer/session')->getId();
-        $productId   =   $params['product'];
+        if(!Mage::helper('subscription')->isAlphanum($params['unit']) || !Mage::helper('subscription')->isDigit($params['discount_type']) || !Mage::helper('subscription')->isNumber($params['discount_value']))
+        {
+            return;
+        }
 
+        if($params['discount_type'] == 2)
+        {
+            if(!Mage::helper('subscription')->isDigit($params['discount_value']) ||  !Mage::helper('subscription')->numericRange($params['discount_value'], 0 ,100))
+            {
+                return;
+            }
+        }
+        $orderId     =   $observer->getData('order_ids');
+        try
+        {
+            $Incrementid =   Mage::getSingleton('sales/order')->load($orderId)->getIncrementId();
+            $date        =   Mage::getModel('core/date')->gmtDate('Y-m-d');
+            $customerId  =   Mage::getSingleton('customer/session')->getId();
+        }
+        catch (Exception $e)
+        {    
+            Mage::getSingleton('core/session')->addError('Sorry unable to subscribe');
+            Mage::log("Customer id = $customerId was unable to subscriber ",null,"SubscribedCustomerDetails.log");
+            return;
+        }
         
         $data       =   array(
                                 'start_date'    =>  $date,
                                 'last_date'     =>  $date,
-                                'unit_selected' =>  $unit,
+                                'unit_selected' =>  $params['unit'],
                                 'order_id'      =>  $Incrementid,
-                                'product_id'    =>  $productId,
+                                'product_id'    =>  $params['product'],
                                 'customer_id'   =>  $customerId,
                                 'number_of_orders_placed'=>1,
                                 'discount_type' =>  $params['discount_type'],
@@ -166,7 +224,8 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
         {
             $model = Mage::getSingleton('subscription/subscriptioncustomer');
             $model->addData($data)
-            ->save();
+                  ->save();
+            Mage::getSingleton('checkout/cart')->truncate()->save();
             Mage::getSingleton('core/session')->unsSubscriptionParam();         
         }
         catch(Mage_Core_Exception $e)

@@ -20,12 +20,25 @@ class Thycart_Subscription_IndexController extends Mage_Core_Controller_Front_Ac
     		 $this->_redirect('subscription/index/subscription');
     		 return;
     	}
-        $orderNumber = $this->getRequest()->getParam('order_number');
+        if(!Mage::helper('subscription')->isDigit($this->getRequest()->getParam('order_number')) || !Mage::helper('subscription')->isDigit($this->getRequest()->getParam('subscription_id')))
+        {
+            Mage::getSingleton('core/session')->addError('Order Id is wrong');
+             $this->_redirect('subscription/index/subscription');
+             return;
+        }
+        $orderNumber    = $this->getRequest()->getParam('order_number');
         $subscriptionId = $this->getRequest()->getParam('subscription_id');
-        $order = Mage::getModel('sales/order')->load($orderNumber, 'increment_id');
-
-        $subscriptionCancelled = $this->cancelSubscription($subscriptionId);
-        if(strtolower($order->getStatusLabel()) === 'pending')
+        try
+        {
+            $order = Mage::getModel('sales/order')->load($orderNumber, 'increment_id');
+            $subscriptionCancelled = $this->cancelSubscription($subscriptionId);
+        }
+        catch(Exception $e)
+        {
+            throw new Exception(EXCEPTION_MSG);return;            
+        }
+        
+        if($order->getStatus() === 'pending')
         {
             $orderCancelled = $this->cancelOrder($order);
         }
@@ -44,21 +57,21 @@ class Thycart_Subscription_IndexController extends Mage_Core_Controller_Front_Ac
 
     public function cancelSubscription($subscriptionId=0)
     {
-        if(empty($subscriptionId))
+        if(empty($subscriptionId) || !Mage::helper('subscription')->isDigit($subscriptionId))
         {
             return;
         }
-        $subscriptionModel = Mage::getModel('subscription/subscriptioncustomer')->load($subscriptionId);
-        $data = array('active'=>0);
         try
         {
-            $subscriptionModel->addData($data);
+            $subscriptionModel = Mage::getModel('subscription/subscriptioncustomer')->load($subscriptionId);
+            $subscriptionModel->setActive(0);
             $subscriptionModel->save();
             return true;
         }
         catch(Exception $e)
         {
-            throw new Exception(EXCEPTION_MSG);return;            
+            throw new Exception(EXCEPTION_MSG);
+            return;            
         }
     }
 
@@ -77,7 +90,8 @@ class Thycart_Subscription_IndexController extends Mage_Core_Controller_Front_Ac
         }
         catch(Exception $e)
         {
-            throw new Exception(EXCEPTION_MSG);return;            
+            throw new Exception(EXCEPTION_MSG);
+            return;            
         }
     }
 }
