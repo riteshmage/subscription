@@ -42,13 +42,16 @@ class Thycart_Subscription_CartController extends Mage_Checkout_CartController
             }
             $cart->save();
             $this->_getSession()->setCartWasUpdated(true);
+            Mage::dispatchEvent('checkout_cart_add_product_complete',
+                array('product' => $product, 'request' => $this->getRequest(), 'response' => $this->getResponse())
+            );
 
             if (!$this->_getSession()->getNoCartRedirect(true))
             {
                 if (!$cart->getQuote()->getHasError())
                 {
-                    $message = $this->__('%s Have been successfully subscribed.', Mage::helper('core')->escapeHtml($product->getName()));
-                    $this->_getSession()->addSuccess($message);
+                    $message = $this->__('%s Have been added for subscription.', Mage::helper('core')->escapeHtml($product->getName()));
+                    Mage::getSingleton('core/session')->addSuccess($message);
                 }
                 $this->_redirect('checkout/onepage');
                 return; 
