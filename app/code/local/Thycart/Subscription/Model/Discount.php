@@ -3,13 +3,16 @@ class Thycart_Subscription_Model_Discount
 {
 	public function setDiscount($quote, $discountAmount, $disTotal)
 	{
+		if(empty($quote) || empty($discountAmount) || empty($disTotal))
+		{
+			return fasle;
+		}
+		
 		$quoteid = $quote->getId();
-
 		if($quoteid) 
 		{
 			if($discountAmount>0) 
 			{
-
 				$total=$quote->getBaseSubtotal();
 				$quote->setSubtotal(0);
 				$quote->setBaseSubtotal(0);
@@ -67,5 +70,6 @@ class Thycart_Subscription_Model_Discount
 				}
 			}
 		}
+		return true;
 	}
 }
