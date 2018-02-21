@@ -120,7 +120,7 @@ class Thycart_Subscription_Adminhtml_UnitController extends Mage_Adminhtml_Contr
 
 	public function validateData($postData)
 	{
-		if ( empty($this->getRequest()->getParam('subscription_unit')) || empty($this->getRequest()->getParam('number_of_days')) || empty($this->getRequest()->getParam('active')) )
+		if ( empty($this->getRequest()->getParam('subscription_unit')) || empty($this->getRequest()->getParam('number_of_days')))
 		{
 			$this->validationError();
 			return false;

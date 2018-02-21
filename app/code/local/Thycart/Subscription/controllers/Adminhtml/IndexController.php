@@ -222,7 +222,7 @@ class Thycart_Subscription_Adminhtml_IndexController extends Mage_Adminhtml_Cont
 
 	public function validateFilterData($postData)
 	{
-		if (empty($this->getRequest()->getParam('subscription_name')) || empty($this->getRequest()->getParam('max_billing_cycle')) || empty($this->getRequest()->getParam('discount_type')) || empty($this->getRequest()->getParam('discount_value')) || empty($this->getRequest()->getParam('unit')) || empty($this->getRequest()->getParam('active')) || empty($this->getRequest()->getParam('product_sku')))
+		if (empty($this->getRequest()->getParam('subscription_name')) || empty($this->getRequest()->getParam('max_billing_cycle')) || empty($this->getRequest()->getParam('discount_type')) || empty($this->getRequest()->getParam('discount_value')) || empty($this->getRequest()->getParam('unit')) || empty($this->getRequest()->getParam('product_sku')))
 		{
 			$this->validationError();
 			return false;
