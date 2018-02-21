@@ -25,6 +25,19 @@ class Thycart_Subscription_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 		return false;
 	}
+	public function isDigit($var, $length=0)
+	{
+		$pattern = "/^\d+$/";
+		if(preg_match($pattern, $var))
+		{
+			if($length && strlen($length) != $length)
+			{
+				return false;	
+			}
+			return true;
+		}
+		return false;
+	}
 
 	public function isAlphanum($var)
 	{
