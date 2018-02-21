@@ -225,7 +225,6 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
             $model = Mage::getSingleton('subscription/subscriptioncustomer');
             $model->addData($data)
                   ->save();
-            Mage::getSingleton('checkout/cart')->truncate()->save();
             Mage::getSingleton('core/session')->unsSubscriptionParam();         
         }
         catch(Mage_Core_Exception $e)
