@@ -174,24 +174,24 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
     public function successfullySubscribed($observer)
     {
         $params =Mage::getSingleton('core/session')->getSubscriptionParam();
-        if(empty($params))
+        if(empty($params) || empty($observer))
         {
-            return;
-        }       
-        if(empty($observer))
-        {
-            return ;
+            Mage::getSingleton('core/session')->addError('Sorry unable to subscribe');
+            return false;
         }
+
         if(!Mage::helper('subscription')->isAlphanum($params['unit']) || !Mage::helper('subscription')->isDigit($params['discount_type']) || !Mage::helper('subscription')->isNumber($params['discount_value']))
         {
-            return;
+            Mage::getSingleton('core/session')->addError('Sorry unable to subscribe');
+            return false;
         }
 
         if($params['discount_type'] == 2)
         {
             if(!Mage::helper('subscription')->isDigit($params['discount_value']) ||  !Mage::helper('subscription')->numericRange($params['discount_value'], 0 ,100))
             {
-                return;
+                Mage::getSingleton('core/session')->addError('Sorry unable to subscribe');
+                return false;
             }
         }
         $orderId     =   $observer->getData('order_ids');
@@ -199,38 +199,35 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
         {
             $Incrementid =   Mage::getSingleton('sales/order')->load($orderId)->getIncrementId();
             $date        =   Mage::getModel('core/date')->gmtDate('Y-m-d');
-            $customerId  =   Mage::getSingleton('customer/session')->getId();
-        }
-        catch (Exception $e)
-        {    
-            Mage::getSingleton('core/session')->addError('Sorry unable to subscribe');
-            Mage::log("Customer id = $customerId was unable to subscriber ",null,"SubscribedCustomerDetails.log");
-            return;
-        }
-        
-        $data       =   array(
+            $customer    =   Mage::getSingleton('customer/session')->getCustomer();
+            $data        =   array(
                                 'start_date'    =>  $date,
                                 'last_date'     =>  $date,
                                 'unit_selected' =>  $params['unit'],
                                 'order_id'      =>  $Incrementid,
                                 'product_id'    =>  $params['product'],
-                                'customer_id'   =>  $customerId,
+                                'customer_id'   =>  $customer->getId(),
                                 'number_of_orders_placed'=>1,
                                 'discount_type' =>  $params['discount_type'],
                                 'discount_value'=>  $params['discount_value'],
                                 'active'        =>  1
                               );
-        try
-        {
-            $model = Mage::getSingleton('subscription/subscriptioncustomer');
-            $model->addData($data)
-                  ->save();
+            
+            $model       =  Mage::getSingleton('subscription/subscriptioncustomer')->addData($data)->save();
+            $status      = 'Subscribed';
+            $subject     = 'Subscription notification';
+            $storeId     =  Mage::app()->getStore()->getId();
+            $productName =  Mage::getResourceModel('catalog/product')
+                            ->getAttributeRawValue($params['product'],'name', $storeId);
+            Mage::helper('subscription')
+                ->sendMail($customer->getEmail(), $customer->getName(), $subject,$status, $productName,$params['unit']);     
             Mage::getSingleton('core/session')->unsSubscriptionParam();         
         }
         catch(Mage_Core_Exception $e)
         {
-            Mage::throwExceptoin('unable to subscried');
-            return; 
+            Mage::getSingleton('core/session')->addError('Sorry unable to subscribe');
+            Mage::log("Customer id = $customerId was unable to subscriber ",null,"SubscribedCustomerDetails.log");
+            return false; 
         }
     }       
 }
