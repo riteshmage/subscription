@@ -29,9 +29,9 @@
 	</menu>
 	<acl>
 		<resources>
-<!-- 			<all>
+ 			<all>
 				<title>Allow Everything</title>
-			</all>  dont know why it is used for so commented--> 
+			</all>
 			<admin>
 				<children>
 					<promo>
@@ -65,6 +65,25 @@
 							</unit>
 						</children>
 					</promo>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<config>
+								<children>
+									<notification>
+										<title>Subscription email setup</title>
+									</notification>
+								</children>
+							</config>
+						</children>
+					</system>
 				</children>
 			</admin>
 		</resources>
