@@ -14,7 +14,7 @@ class Thycart_Subscription_IndexController extends Mage_Core_Controller_Front_Ac
     
 	public function cancelAction()
     {
-    	if(empty($this->getRequest()->getParam('order_number')) || empty($this->getRequest()->getParam('subscription_id')))
+    	if(empty($this->getRequest()->getParam('order_number')) || empty($this->getRequest()->getParam('subscription_id')) || empty($this->getRequest()->getParam('productName')) || empty($this->getRequest()->getParam('unit')))
     	{
     		 Mage::getSingleton('core/session')->addError('Order Id is wrong');
     		 $this->_redirect('subscription/index/subscription');
@@ -28,6 +28,11 @@ class Thycart_Subscription_IndexController extends Mage_Core_Controller_Front_Ac
         }
         $orderNumber    = $this->getRequest()->getParam('order_number');
         $subscriptionId = $this->getRequest()->getParam('subscription_id');
+        $productName    = $this->getRequest()->getParam('productName');
+        $unit           = $this->getRequest()->getParam('unit');
+        $customer       = Mage::getSingleton('customer/session')->getCustomer();
+        $status         = 'UnSubscribed';
+        $subject        = 'UnSubscription notification';
         try
         {
             $order = Mage::getModel('sales/order')->load($orderNumber, 'increment_id');
@@ -35,7 +40,8 @@ class Thycart_Subscription_IndexController extends Mage_Core_Controller_Front_Ac
         }
         catch(Exception $e)
         {
-            throw new Exception(EXCEPTION_MSG);return;            
+            throw new Exception(EXCEPTION_MSG);
+            return;            
         }
         
         if($order->getStatus() === 'pending')
@@ -45,11 +51,12 @@ class Thycart_Subscription_IndexController extends Mage_Core_Controller_Front_Ac
         if($subscriptionCancelled)
         {            
             Mage::getSingleton('core/session')->addSuccess('Subscription Cancelled Sucessfully');
+            Mage::helper('subscription')
+                ->sendMail($customer->getEmail(), $customer->getName(), $subject,$status, $productName,$unit);    
         }
         else
         {
             Mage::getSingleton('core/session')->addError('Subscription cannot be canceled');
-            exit;
         }
         $this->_redirect('subscription/index/subscription');
         return;
