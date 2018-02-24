@@ -130,6 +130,15 @@
 				</observers>
 			</checkout_onepage_controller_success_action>
 		</events>
+		<template>
+			<email>
+				<subscription_template>
+					<label>Subscription Template</label>
+					<file>subscription_template.html</file>
+					<type>html</type>
+				</subscription_template>
+			</email>
+		</template>
 	</global>
 	<crontab>
 		<jobs>
