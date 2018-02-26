@@ -143,10 +143,10 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
             }
         } 
         
-        $quote         =  $observer->getEvent()->getQuote();
-        $discountAmount=  $params['discount_value'];
-        $disTotal = $quote->getItemsQty() * $discountAmount;
-        $productPrice = 0;
+        $quote          =  $observer->getEvent()->getQuote();
+        $discountAmount =  $params['discount_value'];
+        $disTotal       =  $quote->getItemsQty() * $discountAmount;
+        $productPrice   =  0;
 
         if(isset($quote->getAllItems()[0]))
         {
@@ -214,7 +214,7 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
                               );
             
             $model       =  Mage::getSingleton('subscription/subscriptioncustomer')->addData($data)->save();
-            $status      = 'Subscribed';
+            $status      = 'subscribed';
             $subject     = 'Subscription notification';
             $storeId     =  Mage::app()->getStore()->getId();
             $productName =  Mage::getResourceModel('catalog/product')

@@ -31,8 +31,8 @@ class Thycart_Subscription_IndexController extends Mage_Core_Controller_Front_Ac
         $productName    = $this->getRequest()->getParam('productName');
         $unit           = $this->getRequest()->getParam('unit');
         $customer       = Mage::getSingleton('customer/session')->getCustomer();
-        $status         = 'UnSubscribed';
-        $subject        = 'UnSubscription notification';
+        $status         = 'unsubscribed';
+        $subject        = 'Unsubscription notification';
         try
         {
             $order = Mage::getModel('sales/order')->load($orderNumber, 'increment_id');
