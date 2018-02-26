@@ -48,11 +48,6 @@ class Thycart_Subscription_CartController extends Mage_Checkout_CartController
 
             if (!$this->_getSession()->getNoCartRedirect(true))
             {
-                if (!$cart->getQuote()->getHasError())
-                {
-                    $message = $this->__('%s Have been added for subscription.', Mage::helper('core')->escapeHtml($product->getName()));
-                    Mage::getSingleton('core/session')->addSuccess($message);
-                }
                 $this->_redirect('checkout/onepage');
                 return; 
             }
