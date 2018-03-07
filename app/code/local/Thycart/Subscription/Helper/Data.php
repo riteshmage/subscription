@@ -180,7 +180,7 @@ class Thycart_Subscription_Helper_Data extends Mage_Core_Helper_Abstract
         }
         if(Mage::getStoreConfig('notification/email_group/email'))
         {
-            $templateId     = 1;     
+            $templateId     = 2;     
             $senderName     = Mage::getStoreConfig('notification/email_group/sender_name');
             $senderEmail    = Mage::getStoreConfig('notification/email_group/sender_email');        
             $sender         = array('name' => $senderName,
