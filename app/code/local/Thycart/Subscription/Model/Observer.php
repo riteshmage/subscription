@@ -176,7 +176,6 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
         $params =Mage::getSingleton('core/session')->getSubscriptionParam();
         if(empty($params) || empty($observer))
         {
-            Mage::getSingleton('core/session')->addError('Sorry unable to subscribe');
             return false;
         }
 
