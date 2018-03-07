@@ -6,19 +6,19 @@ class Thycart_Subscription_Block_Adminhtml_Customer_Grid extends Mage_Adminhtml_
 		parent::__construct();
 		$this->setId('subscribed_customer');
 		$this->setDefaultSort('id');
-		$this->setDefaultDir('ASC');
+		$this->setDefaultDir('DESC');
 		$this->setUseAjax(false);
 		$this->setSaveParametersInSession(true);
 	}
 	protected function _prepareCollection()
 	{
+		$nameAttrID = Mage::getModel('eav/config')->getAttribute('catalog_product','name')->getId();
 		$collection = Mage::getResourceModel('subscription/subscriptioncustomer_collection');
-		foreach ($collection as $value)
-		{
-			$product_id 	= $value->getData()['product_id'];
-			$product_name	= Mage::getSingleton('catalog/product')->load($product_id)->getName();
-			$value->setData('product_name',$product_name);
-		}
+		$collection->getSelect()
+				->join('catalog_product_entity_varchar',
+					'catalog_product_entity_varchar.entity_id = main_table.product_id AND attribute_id  = '.$nameAttrID,
+					array('product_name'=>'value'));
+		
 		$this->setCollection($collection);
 		return parent::_prepareCollection();
 	}
@@ -53,6 +53,8 @@ class Thycart_Subscription_Block_Adminhtml_Customer_Grid extends Mage_Adminhtml_
 			'align'     =>'center',
 			'width'     => '50px',
 			'index'     => 'product_name',
+			'filter'    => false
+
 		));
 		$this->addColumn('number_of_orders_placed',array(
 			'header'    => Mage::helper('subscription')->__('Orders Placed'),
