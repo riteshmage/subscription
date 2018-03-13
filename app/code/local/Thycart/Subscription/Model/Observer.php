@@ -119,29 +119,6 @@ class Thycart_Subscription_Model_Observer extends Varien_Object
                 return;
             }
         }
-
-        if(Mage::app()->getRequest()->getActionName() == 'index' && $params['product'])
-        {
-            $item = $observer->getEvent()->getQuoteItem();
-            try
-            {
-                $cartitem = Mage::getSingleton('checkout/cart');
-                foreach ($cartitem->getQuote()->getItemsCollection() as $_item) 
-                {
-                    $_item->isDeleted(true);
-                }  
-                $product = Mage::getModel('catalog/product');
-                $productToAdd = $product->load($params['product']);
-                $cart = Mage::getSingleton('checkout/session')->getQuote();
-                $cart->addProduct($productToAdd, $params['qty']);
-                $cart->save();
-            }
-            catch (Mage_Core_Exception $e)
-            {
-                echo $e;
-                return;  
-            }
-        } 
         
         $quote          =  $observer->getEvent()->getQuote();
         $discountAmount =  $params['discount_value'];
