@@ -41,11 +41,27 @@ if(empty($lists->getData())) { ?>
                     $link = ($list['active'] > 0) ? $this->getUrl('subscription/index/cancel', array('order_number' => $list['order_id'], 'subscription_id' => $list['id'],'productName'=>$this->getProductByName($list['product_id']),'unit'=>$list['unit_selected'],'_secure'=>true)) : 0;
                     $text = ($link) ? $this->__('Unsubscribe') : '-';
                 ?>
-                <a href="<?php echo $link; ?>"><?php echo $text; ?></a>                    
+                <a href="<?php echo $link; ?>" onclick='return unSubscriptionConfirmation()'><?php echo $text; ?></a>                    
             </td>
         </tr>
         <?php $i++; endforeach; ?>
     </tbody>
 </table>
-<script type="text/javascript">decorateTable('subscription-table');</script>
+<script type="text/javascript">decorateTable('subscription-table');
+    // jQuery(document).ready(function()
+    // {
+    //     jQuery('.unsubscribeLink').onClick(function()
+    //     {
+    //         alert('d');
+    //     }); 
+    // });
+    function unSubscriptionConfirmation()
+    {
+        if(confirm('Are you sure you want to unsubscribe?'))
+        {   
+            return true;
+        }
+        return false;
+    }
+</script>
 <?php echo $this->getPagerHtml(); ?>
