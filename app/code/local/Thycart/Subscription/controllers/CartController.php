@@ -2,8 +2,16 @@
 require_once Mage::getModuleDir('controllers', 'Mage_Checkout').DS.'CartController.php';
 class Thycart_Subscription_CartController extends Mage_Checkout_CartController
 {
-	public function myaddAction()
+	public function subscriptionAction()
     {
+        if(!Mage::getSingleton('customer/session')->isLoggedIn())
+        {
+            $session = Mage::getSingleton('customer/session');
+            $session->setAfterAuthUrl(Mage::helper('core/http')->getHttpReferer());  
+            Mage::app()->getResponse()->setRedirect(Mage::getUrl('customer/account/login'))->sendResponse();
+            return; 
+        }
+  
         if (!$this->_validateFormKey())
         {
             $this->_goBack();
