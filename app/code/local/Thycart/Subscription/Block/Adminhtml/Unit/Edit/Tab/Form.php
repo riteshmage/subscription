@@ -11,7 +11,7 @@ class Thycart_Subscription_Block_Adminhtml_Unit_Edit_Tab_Form extends Mage_Admin
 			'label'     => Mage::helper('subscription')->__('Unit name'),
 			'name'      => 'subscription_unit',
 			'required'  => true,
-			'class' 	=> 'validate-code validate-no-html-tags required-entry',
+			'class' 	=> 'validate-no-html-tags required-entry',
 			'after_element_html' => '<small>Add Name</small>'
 		));
 
